@@ -13,11 +13,11 @@ const Footer = () => {
                   <MessageCircle className="w-5 h-5 text-primary-foreground" />
                 </div>
                 <span className="text-xl font-bold text-foreground">
-                  A Safe Space to Talk
+                  Talk freely. Feel heard
                 </span>
               </div>
               <p className="text-muted-foreground mb-6 max-w-md">
-                A Safe Space to Talk provides confidential, non-clinical
+                Talk freely. Feel heard provides confidential, non-clinical
                 listening sessions. We are not a therapy, medical, or emergency
                 service.
               </p>

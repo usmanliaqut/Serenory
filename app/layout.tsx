@@ -1,22 +1,22 @@
-import type React from "react"
-import type { Metadata } from "next"
-import { GeistSans } from "geist/font/sans"
-import { GeistMono } from "geist/font/mono"
-import { Analytics } from "@vercel/analytics/next"
-import { Suspense } from "react"
-import "./globals.css"
+import type React from "react";
+import type { Metadata } from "next";
+import { GeistSans } from "geist/font/sans";
+import { GeistMono } from "geist/font/mono";
+import { Analytics } from "@vercel/analytics/next";
+import { Suspense } from "react";
+import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "A Safe Space to Talk - Professional Therapy & Counseling",
+  title: "The calm in the conversation.",
   description:
-    "Book private 1-on-1 therapy sessions in a safe, welcoming environment. Professional counseling services to support your mental health journey.",
-  generator: "v0.app",
-}
+    "Find peace in sharing. Serenory connects you with a non-judgmental listener so you can talk freely, feel heard, and leave lighter.",
+  generator: "default",
+};
 
 export default function RootLayout({
   children,
 }: Readonly<{
-  children: React.ReactNode
+  children: React.ReactNode;
 }>) {
   return (
     <html lang="en">
@@ -25,5 +25,5 @@ export default function RootLayout({
         <Analytics />
       </body>
     </html>
-  )
+  );
 }

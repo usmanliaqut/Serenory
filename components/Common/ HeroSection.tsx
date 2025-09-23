@@ -1,6 +1,7 @@
 import React from "react";
-import { Calendar, Heart, Shield, Users } from "lucide-react";
+import { Calendar, Heart, Shield, Smile, Users } from "lucide-react";
 import { Button } from "../ui/button";
+import FeatureCard from "../Global/FeatureCard";
 
 const HeroSection: React.FC = () => {
   const handleClick = () => {
@@ -48,7 +49,7 @@ const HeroSection: React.FC = () => {
 
       {/* Content */}
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
-        <div className="max-w-4xl mx-auto text-center">
+        <div className="max-w-5xl mx-auto text-center">
           {/* Brand Badge */}
           <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 mb-8 shadow-lg border border-white/50">
             <Heart className="w-5 h-5 text-emerald-600" />
@@ -117,38 +118,46 @@ const HeroSection: React.FC = () => {
           </div>
 
           {/* Trust Indicators */}
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-3xl mx-auto">
-            <div className="flex flex-col items-center gap-3 p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
-                <Shield className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="font-semibold text-gray-900">
-                Completely Anonymous
-              </h3>
-              <p className="text-sm text-gray-600 text-center leading-relaxed">
-                Your privacy is sacred. No personal information required.
-              </p>
-            </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8 max-w-5xl mx-auto">
+            <FeatureCard
+              icon={
+                <div className="w-12 h-12 bg-gradient-to-br from-emerald-500 to-emerald-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Shield className="w-6 h-6 text-white" />
+                </div>
+              }
+              title="Confidential & Anonymous"
+              description="Your privacy is sacred. No personal information required."
+            />
 
-            <div className="flex flex-col items-center gap-3 p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
-                <Heart className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="font-semibold text-gray-900">Non-Judgmental</h3>
-              <p className="text-sm text-gray-600 text-center leading-relaxed">
-                A safe space where you can share without fear of judgment.
-              </p>
-            </div>
+            <FeatureCard
+              icon={
+                <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Heart className="w-6 h-6 text-white" />
+                </div>
+              }
+              title="Non-Judgmental Listening"
+              description="A safe space where you can share without fear of judgment."
+            />
 
-            <div className="flex flex-col items-center gap-3 p-6 bg-white/60 backdrop-blur-sm rounded-2xl border border-white/50 shadow-lg hover:shadow-xl transition-all duration-300">
-              <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
-                <Users className="w-6 h-6 text-white" />
-              </div>
-              <h3 className="font-semibold text-gray-900">Always Available</h3>
-              <p className="text-sm text-gray-600 text-center leading-relaxed">
-                Caring listeners ready when you need to be heard most.
-              </p>
-            </div>
+            <FeatureCard
+              icon={
+                <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
+                  <Users className="w-6 h-6 text-white" />
+                </div>
+              }
+              title="Accessible & Simple (no waitlists)"
+              description="Caring listeners ready when you need to be heard most."
+            />
+
+            <FeatureCard
+              icon={
+                <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
+                  <Smile className="w-6 h-6 text-white" />
+                </div>
+              }
+              title="Safe Space for All Emotions"
+              description="Whatever you’re feeling, Serenory is here to listen without limits."
+            />
           </div>
 
           {/* Secondary tagline */}

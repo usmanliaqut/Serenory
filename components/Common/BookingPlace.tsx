@@ -26,6 +26,7 @@ import { TimeSlotDrawer } from "./TimeSlotDrawer";
 import { ValuePromise } from "../Global/ValuePromise";
 import Link from "next/link";
 import HeroSection from "./ HeroSection";
+import HowItWorksSection from "./HowItWorksSection";
 
 type SessionType = {
   id: number;
@@ -126,11 +127,11 @@ const BookingPlace = () => {
       </section> */}
 
       <HeroSection />
-
+      <HowItWorksSection />
       <ValuePromise />
 
       {/* Features Section */}
-      <section className="py-20 bg-gradient-to-br from-primary/10 via-card/30 to-background">
+      {/* <section className="py-20 bg-gradient-to-br from-primary/10 via-card/30 to-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
@@ -243,9 +244,9 @@ const BookingPlace = () => {
             </Card>
           </div>
         </div>
-      </section>
+      </section> */}
 
-      <section id="services" className="py-20 relative">
+      {/* <section id="services" className="py-20 relative">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-3xl md:text-4xl font-bold text-foreground mb-4">
@@ -328,7 +329,7 @@ const BookingPlace = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
 
       <section className="py-20 bg-gradient-to-br from-primary/10 via-card/30 to-background">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">

@@ -15,7 +15,7 @@ const AppNavbar = () => {
                 <MessageCircle className="w-5 h-5 text-primary-foreground" />
               </div>
               <span className="text-xl font-bold text-foreground">
-                A Safe Space to Talk
+                Serenory
               </span>
             </div>
             <div className="hidden md:flex items-center space-x-8">
