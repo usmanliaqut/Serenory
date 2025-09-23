@@ -19,9 +19,12 @@ import {
   Phone,
   Mail,
   MapPin,
+  Heart,
 } from "lucide-react";
 import Image from "next/image";
 import { TimeSlotDrawer } from "./TimeSlotDrawer";
+import { ValuePromise } from "../Global/ValuePromise";
+import Link from "next/link";
 
 type SessionType = {
   id: number;
@@ -38,361 +41,92 @@ const BookingPlace = () => {
     setDrawerOpen(true);
   };
 
+  const steps = [
+    {
+      number: "1",
+      title: "Pick a time",
+      description: "15, 30, or 60 minutes.",
+      icon: Clock,
+    },
+    {
+      number: "2",
+      title: "Book & pay securely",
+      description: "instant confirmation.",
+      icon: Shield,
+    },
+    {
+      number: "3",
+      title: "Talk your way",
+      description: "voice, video, or chat.",
+      icon: MessageCircle,
+    },
+  ];
+
+  const handleClick = () => {};
+
   return (
     <>
       {/* Hero Section */}
       <section className="relative py-20 lg:py-32 overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/30 via-background/80 to-background">
+        <div className="absolute inset-0">
+          <div className="absolute inset-0 bg-gradient-to-br from-(--color-secondary)/90 via-(--color-background)/80 to-(--color-secondary)/70" />
           <Image
-            src="/modern-professional-office-space-with-natural-ligh.jpg"
-            alt="Professional meeting space"
+            src="/wavesimages.jpg"
+            alt="Peaceful natural background"
+            className="w-full h-full object-cover opacity-40"
             fill
-            className="object-cover opacity-10"
             priority
           />
-          <div className="absolute inset-0 bg-gradient-to-br from-card/80 to-background/90"></div>
+          {/* Soft abstract radial glows */}
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,color(display-p3 0.62_0.77_0.55/_0.15),transparent_50%)]" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,color(display-p3 0.82_0.7_0.52/_0.12),transparent_50%)]" />
+
+          {/* Floating soft shapes */}
+          <div className="absolute top-20 left-10 w-32 h-32 bg-primary/10 rounded-full blur-xl animate-float" />
+          <div className="absolute bottom-32 right-20 w-24 h-24 bg-accent/15 rounded-full blur-lg animate-float animation-delay-1000" />
+          <div className="absolute top-1/2 left-1/3 w-16 h-16 bg-primary/10 rounded-full blur-md animate-float animation-delay-2000" />
         </div>
+
+        {/* Content */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            <div className="max-w-2xl">
-              <Badge variant="secondary" className="mb-6 animate-fade-in-up">
-                Private 1-on-1 Sessions
-              </Badge>
+          <div className="grid lg:grid-cols-1 gap-12 items-center">
+            <div className="w-full flex flex-col items-center pt-10 text-center">
               <h1 className="text-4xl md:text-6xl font-bold text-foreground mb-6 text-balance animate-fade-in-up animation-delay-200">
-                Book Your Private 1-on-1 Sessions
+                The quiet space for your story.
               </h1>
-              <p className="text-xl text-muted-foreground mb-8 text-pretty animate-fade-in-up animation-delay-400">
-                Schedule private sessions in a secure, confidential environment.
-                Easy booking system that fits your schedule and needs.
+              <p className="text-xl text-muted-foreground mb-8 text-pretty max-w-2xl animate-fade-in-up animation-delay-400">
+                No forms. No waiting. Just the simple power of being heard.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 animate-fade-in-up animation-delay-600">
                 <Button
                   size="lg"
-                  onClick={() =>
-                    handleBookSession({
-                      id: 1,
-                      title: "Single Session",
-                      duration: "60 minutes",
-                      price: 75,
-                    })
-                  }
-                  className="text-lg px-8 hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl"
+                  onClick={handleClick}
+                  className="text-lg px-8 bg-primary hover:bg-primary/90 text-primary-foreground hover:scale-105 transition-all duration-300 shadow-lg hover:shadow-xl border-0"
                 >
                   <Calendar className="w-5 h-5 mr-2" />
-                  Book Your Session
+                  Begin Your Session
                 </Button>
                 <Button
                   variant="outline"
                   size="lg"
-                  className="text-lg px-8 bg-transparent hover:scale-105 transition-all duration-300"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    document
+                      .getElementById("services")
+                      ?.scrollIntoView({ behavior: "smooth" });
+                  }}
+                  className="text-lg px-8 bg-transparent border-border text-foreground/80 transition-all duration-300"
+                  aria-label="Learn how it works"
                 >
-                  Learn More
+                  <Link href="#services">How it Works</Link>
                 </Button>
               </div>
             </div>
-
-            <div className="relative lg:block hidden animate-fade-in-up animation-delay-800">
-              <div className="relative w-full h-96">
-                <svg
-                  viewBox="0 0 400 300"
-                  className="w-full h-full"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  {/* Background elements */}
-                  <defs>
-                    <linearGradient
-                      id="bgGradient"
-                      x1="0%"
-                      y1="0%"
-                      x2="100%"
-                      y2="100%"
-                    >
-                      <stop
-                        offset="0%"
-                        stopColor="hsl(var(--primary))"
-                        stopOpacity="0.1"
-                      />
-                      <stop
-                        offset="100%"
-                        stopColor="hsl(var(--primary))"
-                        stopOpacity="0.05"
-                      />
-                    </linearGradient>
-                  </defs>
-
-                  {/* Background shape */}
-                  <rect
-                    width="400"
-                    height="300"
-                    fill="url(#bgGradient)"
-                    rx="20"
-                  />
-
-                  {/* Calendar/booking interface */}
-                  <rect
-                    x="50"
-                    y="50"
-                    width="120"
-                    height="80"
-                    fill="hsl(var(--card))"
-                    stroke="hsl(var(--border))"
-                    strokeWidth="2"
-                    rx="8"
-                  />
-                  <rect
-                    x="60"
-                    y="60"
-                    width="100"
-                    height="8"
-                    fill="hsl(var(--primary))"
-                    rx="4"
-                  />
-                  <rect
-                    x="60"
-                    y="75"
-                    width="30"
-                    height="6"
-                    fill="hsl(var(--muted-foreground))"
-                    rx="3"
-                  />
-                  <rect
-                    x="95"
-                    y="75"
-                    width="30"
-                    height="6"
-                    fill="hsl(var(--muted-foreground))"
-                    rx="3"
-                  />
-                  <rect
-                    x="60"
-                    y="85"
-                    width="25"
-                    height="6"
-                    fill="hsl(var(--muted-foreground))"
-                    rx="3"
-                  />
-                  <rect
-                    x="90"
-                    y="85"
-                    width="35"
-                    height="6"
-                    fill="hsl(var(--muted-foreground))"
-                    rx="3"
-                  />
-
-                  {/* Calendar grid */}
-                  <g transform="translate(60, 95)">
-                    {[...Array(12)].map((_, i) => (
-                      <rect
-                        key={i}
-                        x={(i % 4) * 22}
-                        y={Math.floor(i / 4) * 15}
-                        width="18"
-                        height="12"
-                        fill={
-                          i === 5 ? "hsl(var(--primary))" : "hsl(var(--muted))"
-                        }
-                        rx="2"
-                      />
-                    ))}
-                  </g>
-
-                  {/* Person illustration */}
-                  <g transform="translate(220, 80)">
-                    {/* Head */}
-                    <circle
-                      cx="40"
-                      cy="30"
-                      r="20"
-                      fill="hsl(var(--primary))"
-                      opacity="0.8"
-                    />
-                    {/* Body */}
-                    <rect
-                      x="25"
-                      y="50"
-                      width="30"
-                      height="40"
-                      fill="hsl(var(--primary))"
-                      opacity="0.6"
-                      rx="15"
-                    />
-                    {/* Arms */}
-                    <rect
-                      x="10"
-                      y="55"
-                      width="15"
-                      height="25"
-                      fill="hsl(var(--primary))"
-                      opacity="0.6"
-                      rx="7"
-                    />
-                    <rect
-                      x="55"
-                      y="55"
-                      width="15"
-                      height="25"
-                      fill="hsl(var(--primary))"
-                      opacity="0.6"
-                      rx="7"
-                    />
-                    {/* Legs */}
-                    <rect
-                      x="30"
-                      y="90"
-                      width="8"
-                      height="30"
-                      fill="hsl(var(--primary))"
-                      opacity="0.6"
-                      rx="4"
-                    />
-                    <rect
-                      x="42"
-                      y="90"
-                      width="8"
-                      height="30"
-                      fill="hsl(var(--primary))"
-                      opacity="0.6"
-                      rx="4"
-                    />
-                  </g>
-
-                  {/* Chat/communication bubbles */}
-                  <g transform="translate(280, 40)">
-                    <ellipse
-                      cx="30"
-                      cy="20"
-                      rx="25"
-                      ry="15"
-                      fill="hsl(var(--primary))"
-                      opacity="0.3"
-                    />
-                    <ellipse
-                      cx="35"
-                      cy="45"
-                      rx="20"
-                      ry="12"
-                      fill="hsl(var(--primary))"
-                      opacity="0.2"
-                    />
-                  </g>
-
-                  {/* Security/privacy icons */}
-                  <g transform="translate(320, 180)">
-                    <rect
-                      x="0"
-                      y="10"
-                      width="25"
-                      height="20"
-                      fill="hsl(var(--primary))"
-                      opacity="0.4"
-                      rx="3"
-                    />
-                    <rect
-                      x="5"
-                      y="5"
-                      width="15"
-                      height="8"
-                      fill="none"
-                      stroke="hsl(var(--primary))"
-                      strokeWidth="2"
-                      rx="7"
-                    />
-                  </g>
-
-                  {/* Clock/time element */}
-                  <g transform="translate(80, 180)">
-                    <circle
-                      cx="20"
-                      cy="20"
-                      r="18"
-                      fill="none"
-                      stroke="hsl(var(--primary))"
-                      strokeWidth="2"
-                      opacity="0.6"
-                    />
-                    <line
-                      x1="20"
-                      y1="20"
-                      x2="20"
-                      y2="10"
-                      stroke="hsl(var(--primary))"
-                      strokeWidth="2"
-                      opacity="0.8"
-                    />
-                    <line
-                      x1="20"
-                      y1="20"
-                      x2="28"
-                      y2="20"
-                      stroke="hsl(var(--primary))"
-                      strokeWidth="2"
-                      opacity="0.8"
-                    />
-                  </g>
-
-                  {/* Floating elements for animation */}
-                  <circle
-                    cx="350"
-                    cy="100"
-                    r="4"
-                    fill="hsl(var(--primary))"
-                    opacity="0.3"
-                    className="animate-float"
-                  />
-                  <circle
-                    cx="80"
-                    cy="40"
-                    r="3"
-                    fill="hsl(var(--primary))"
-                    opacity="0.4"
-                    className="animate-float animation-delay-1000"
-                  />
-                  <circle
-                    cx="300"
-                    cy="250"
-                    r="5"
-                    fill="hsl(var(--primary))"
-                    opacity="0.2"
-                    className="animate-float animation-delay-2000"
-                  />
-                </svg>
-              </div>
-            </div>
           </div>
         </div>
       </section>
 
-      <section className="py-16 bg-card/20">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
-            <div className="group hover:scale-105 transition-transform duration-300">
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2 animate-counter">
-                500+
-              </div>
-              <div className="text-muted-foreground">Sessions Completed</div>
-            </div>
-            <div className="group hover:scale-105 transition-transform duration-300">
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2 animate-counter animation-delay-200">
-                98%
-              </div>
-              <div className="text-muted-foreground">Satisfaction Rate</div>
-            </div>
-            <div className="group hover:scale-105 transition-transform duration-300">
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2 animate-counter animation-delay-400">
-                24/7
-              </div>
-              <div className="text-muted-foreground">Booking Available</div>
-            </div>
-            <div className="group hover:scale-105 transition-transform duration-300">
-              <div className="text-3xl md:text-4xl font-bold text-primary mb-2 animate-counter animation-delay-600">
-                100%
-              </div>
-              <div className="text-muted-foreground">Confidential</div>
-            </div>
-          </div>
-        </div>
-      </section>
+      <ValuePromise />
 
       {/* Features Section */}
       <section className="py-20 bg-gradient-to-br from-primary/10 via-card/30 to-background">
@@ -402,15 +136,15 @@ const BookingPlace = () => {
               Why Choose A Safe Space to Talk?
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
-              A secure, professional platform designed for meaningful private
+              A secure, Friendly platform designed for meaningful private
               conversations and sessions.
             </p>
           </div>
 
           <div className="mb-16 relative">
-            <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden">
+            <div className="relative h-64 md:h-90 rounded-2xl overflow-hidden">
               <Image
-                src="/professional-meeting-room-modern-design.jpg"
+                src="/environment.jpeg"
                 alt="Professional meeting space with modern design"
                 fill
                 className="object-cover"
@@ -418,7 +152,7 @@ const BookingPlace = () => {
               <div className="absolute inset-0 bg-gradient-to-r from-primary/80 to-primary/60 flex items-center justify-center">
                 <div className="text-center text-primary-foreground">
                   <h3 className="text-2xl md:text-3xl font-bold mb-2">
-                    Professional Environment
+                    Friendly Environment
                   </h3>
                   <p className="text-lg opacity-90">
                     Designed for meaningful conversations
@@ -522,9 +256,9 @@ const BookingPlace = () => {
           </div>
 
           <div className="mb-16 grid md:grid-cols-2 gap-8 items-center">
-            <div className="relative h-64 md:h-80 rounded-2xl overflow-hidden">
+            <div className="relative h-64 md:h-90 rounded-2xl overflow-hidden">
               <Image
-                src="/person-using-laptop-booking-system.jpg"
+                src="/booknow.jpeg"
                 alt="Person using laptop for online booking"
                 fill
                 className="object-cover"
@@ -551,44 +285,45 @@ const BookingPlace = () => {
                 </li>
                 <li className="flex items-center">
                   <CheckCircle className="w-5 h-5 text-primary mr-3" />
-                  <span>Automated reminders</span>
+                  <span>Talk your way</span>
                 </li>
               </ul>
             </div>
           </div>
 
-          <div className="grid md:grid-cols-3 gap-8 relative">
-            <div className="group hover:scale-105 transition-transform duration-300">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 hover:bg-primary/20 transition-colors duration-300">
-                <span className="text-2xl font-bold text-primary">1</span>
+          <div className="grid md:grid-cols-3 gap-8 mb-16">
+            {steps.map((step, index) => (
+              <div key={step.number} className="text-center group">
+                <div className="relative mb-6">
+                  <div className="w-20 h-20 bg-gradient-to-br from-sage-100 to-warm-100 rounded-2xl mx-auto flex items-center justify-center shadow-lg group-hover:shadow-xl transition-all duration-300 backdrop-blur-sm border border-sage-200/50">
+                    <step.icon className="w-8 h-8 text-sage-700" />
+                  </div>
+                </div>
+                <h3 className="text-xl font-semibold text-sage-900 mb-1">
+                  {step.title}
+                </h3>
+                <p className="text-sage-700 text-lg">{step.description}</p>
               </div>
-              <CardTitle>Choose Your Time</CardTitle>
-              <CardDescription>
-                Select from available time slots that work best for your
-                schedule.
-              </CardDescription>
-            </div>
+            ))}
+          </div>
 
-            <div className="group hover:scale-105 transition-transform duration-300">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 hover:bg-primary/20 transition-colors duration-300">
-                <span className="text-2xl font-bold text-primary">2</span>
+          <div className="bg-gradient-to-r from-sage-50/80 to-warm-50/80 backdrop-blur-sm rounded-3xl p-8 md:p-12 border border-sage-200/30 shadow-lg">
+            <div className="flex items-start gap-6">
+              <div className="flex-shrink-0">
+                <div className="w-16 h-16 bg-gradient-to-br from-sage-200 to-warm-200 rounded-2xl flex items-center justify-center shadow-md">
+                  <Heart className="w-8 h-8 text-sage-700" />
+                </div>
               </div>
-              <CardTitle>Book Your Session</CardTitle>
-              <CardDescription>
-                Complete your booking with our secure and simple reservation
-                system.
-              </CardDescription>
-            </div>
-
-            <div className="group hover:scale-105 transition-transform duration-300">
-              <div className="w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center mx-auto mb-4 hover:bg-primary/20 transition-colors duration-300">
-                <span className="text-2xl font-bold text-primary">3</span>
+              <div>
+                <h3 className="text-2xl font-semibold text-sage-900 mb-4">
+                  Before Your Session
+                </h3>
+                <p className="text-sage-800 text-lg leading-relaxed text-pretty">
+                  You'll also be able to share how you're feeling through a
+                  simple mood check — so your listener understands the tone
+                  you're arriving with.
+                </p>
               </div>
-              <CardTitle>Attend Your Session</CardTitle>
-              <CardDescription>
-                Join your private session at the scheduled time in our secure
-                environment.
-              </CardDescription>
             </div>
           </div>
         </div>
@@ -746,7 +481,8 @@ const BookingPlace = () => {
             </h2>
             <p className="text-lg text-muted-foreground max-w-2xl mx-auto">
               Choose the option that works best for you. No hidden fees, no
-              surprises.
+              surprises. Reconnection on Guarantee (5-minute grace if session
+              drops)
             </p>
           </div>
 
@@ -758,7 +494,9 @@ const BookingPlace = () => {
               <p className="text-muted-foreground">
                 We believe in transparent pricing that works for everyone.
                 Whether you need a single session or prefer ongoing support, we
-                have options that fit your needs and budget.
+                have options that fit your needs and budget.If a session drops
+                due to technical issues, you’ll have a reconnection window so
+                you don’t feel cut off.
               </p>
               <div className="flex items-center space-x-4">
                 <div className="flex items-center">
@@ -784,8 +522,8 @@ const BookingPlace = () => {
           <div className="grid md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <Card className="border-border/50 relative hover:scale-105 transition-all duration-300 hover:shadow-lg animate-fade-in-up">
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl">Single Session</CardTitle>
-                <div className="text-4xl font-bold text-primary mt-4">$75</div>
+                <CardTitle className="text-2xl">Drift</CardTitle>
+                <div className="text-4xl font-bold text-primary mt-4">$5</div>
                 <CardDescription className="mt-2">
                   Perfect for trying out our service
                 </CardDescription>
@@ -794,7 +532,7 @@ const BookingPlace = () => {
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-primary mr-3" />
-                    <span>60-minute session</span>
+                    <span>15-minute session</span>
                   </li>
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-primary mr-3" />
@@ -809,14 +547,14 @@ const BookingPlace = () => {
                   onClick={() =>
                     handleBookSession({
                       id: 1,
-                      title: "Single Session",
-                      duration: "60 minutes",
-                      price: 75,
+                      title: "Drift Session",
+                      duration: "15 minutes",
+                      price: 5,
                     })
                   }
                   className="w-full mt-6 hover:scale-105 transition-transform duration-200"
                 >
-                  Book Single Session
+                  Book Session
                 </Button>
               </div>
             </Card>
@@ -828,17 +566,14 @@ const BookingPlace = () => {
                 </Badge>
               </div>
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl">Session Package</CardTitle>
-                <div className="text-4xl font-bold text-primary mt-4">$200</div>
-                <CardDescription className="mt-2">
-                  3 sessions - Save $25
-                </CardDescription>
+                <CardTitle className="text-2xl">Anchor</CardTitle>
+                <div className="text-4xl font-bold text-primary mt-4">$30</div>
               </CardHeader>
               <div className="px-6 pb-6">
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-primary mr-3" />
-                    <span>3 x 60-minute sessions</span>
+                    <span>30-minute sessions</span>
                   </li>
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-primary mr-3" />
@@ -857,9 +592,9 @@ const BookingPlace = () => {
                   onClick={() =>
                     handleBookSession({
                       id: 2,
-                      title: "Session Package",
+                      title: "Anchor",
                       duration: "3 months",
-                      price: 200,
+                      price: 30,
                     })
                   }
                   className="w-full mt-6 hover:scale-105 transition-transform duration-200"
@@ -871,17 +606,14 @@ const BookingPlace = () => {
 
             <Card className="border-border/50 relative hover:scale-105 transition-all duration-300 hover:shadow-lg animate-fade-in-up animation-delay-400">
               <CardHeader className="text-center">
-                <CardTitle className="text-2xl">Monthly Plan</CardTitle>
-                <div className="text-4xl font-bold text-primary mt-4">$280</div>
-                <CardDescription className="mt-2">
-                  4 sessions per month - Best value
-                </CardDescription>
+                <CardTitle className="text-2xl">Haven</CardTitle>
+                <div className="text-4xl font-bold text-primary mt-4">$60</div>
               </CardHeader>
               <div className="px-6 pb-6">
                 <ul className="space-y-3">
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-primary mr-3" />
-                    <span>4 x 60-minute sessions</span>
+                    <span>60-minute sessions</span>
                   </li>
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-primary mr-3" />
@@ -893,7 +625,7 @@ const BookingPlace = () => {
                   </li>
                   <li className="flex items-center">
                     <CheckCircle className="w-5 h-5 text-primary mr-3" />
-                    <span>Monthly progress review</span>
+                    <span>Priority booking</span>
                   </li>
                 </ul>
                 <Button
@@ -901,9 +633,9 @@ const BookingPlace = () => {
                   onClick={() =>
                     handleBookSession({
                       id: 3,
-                      title: "Monthly Plan",
+                      title: "Haven",
                       duration: "Monthly",
-                      price: 280,
+                      price: 60,
                     })
                   }
                 >
