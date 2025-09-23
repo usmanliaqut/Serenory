@@ -25,6 +25,7 @@ import Image from "next/image";
 import { TimeSlotDrawer } from "./TimeSlotDrawer";
 import { ValuePromise } from "../Global/ValuePromise";
 import Link from "next/link";
+import HeroSection from "./ HeroSection";
 
 type SessionType = {
   id: number;
@@ -67,27 +68,25 @@ const BookingPlace = () => {
   return (
     <>
       {/* Hero Section */}
-      <section className="relative py-20 lg:py-32 overflow-hidden">
+      {/* <section className="relative py-20 lg:py-32 overflow-hidden">
         <div className="absolute inset-0">
           <div className="absolute inset-0 bg-gradient-to-br from-(--color-secondary)/90 via-(--color-background)/80 to-(--color-secondary)/70" />
           <Image
             src="/wavesimages.jpg"
             alt="Peaceful natural background"
-            className="w-full h-full object-cover opacity-40"
+            className="w-full h-full object-cover opacity-30"
             fill
             priority
           />
-          {/* Soft abstract radial glows */}
+
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_30%_20%,color(display-p3 0.62_0.77_0.55/_0.15),transparent_50%)]" />
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_70%_80%,color(display-p3 0.82_0.7_0.52/_0.12),transparent_50%)]" />
 
-          {/* Floating soft shapes */}
           <div className="absolute top-20 left-10 w-32 h-32 bg-primary/10 rounded-full blur-xl animate-float" />
           <div className="absolute bottom-32 right-20 w-24 h-24 bg-accent/15 rounded-full blur-lg animate-float animation-delay-1000" />
           <div className="absolute top-1/2 left-1/3 w-16 h-16 bg-primary/10 rounded-full blur-md animate-float animation-delay-2000" />
         </div>
 
-        {/* Content */}
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative">
           <div className="grid lg:grid-cols-1 gap-12 items-center">
             <div className="w-full flex flex-col items-center pt-10 text-center">
@@ -124,7 +123,9 @@ const BookingPlace = () => {
             </div>
           </div>
         </div>
-      </section>
+      </section> */}
+
+      <HeroSection />
 
       <ValuePromise />
 
