@@ -17,8 +17,9 @@ const Footer = () => {
                 </span>
               </div>
               <p className="text-muted-foreground mb-6 max-w-md">
-                Private 1-on-1 sessions in a safe, confidential environment.
-                Easy booking for your convenience.
+                A Safe Space to Talk provides confidential, non-clinical
+                listening sessions. We are not a therapy, medical, or emergency
+                service.
               </p>
               <div className="space-y-3">
                 <div className="flex items-center space-x-3">
@@ -28,13 +29,13 @@ const Footer = () => {
                 <div className="flex items-center space-x-3">
                   <Mail className="w-5 h-5 text-primary" />
                   <span className="text-muted-foreground">
-                    hello@safespacetotak.com
+                    hello@safespacetotalk.com
                   </span>
                 </div>
                 <div className="flex items-center space-x-3">
                   <MapPin className="w-5 h-5 text-primary" />
                   <span className="text-muted-foreground">
-                    Available Online Worldwide
+                    Based in UAE · Available world
                   </span>
                 </div>
               </div>

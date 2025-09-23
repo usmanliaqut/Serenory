@@ -6,10 +6,12 @@ import BookingPlace from "@/components/Common/BookingPlace";
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen calm-bg flex flex-col">
       {/* Navigation */}
       <AppNavbar />
-      <BookingPlace />
+      <main className="flex-1">
+        <BookingPlace />
+      </main>
       <Footer />
     </div>
   );
