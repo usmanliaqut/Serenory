@@ -1,21 +1,20 @@
 "use client";
 
-import type React from "react";
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
-import { User, Mail, Phone, MapPin, CreditCard } from "lucide-react";
-import { FinalPaymentPage } from "@/components/Common/FinalPaymentPage";
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import { Badge } from "@/components/ui/badge";
+import { Calendar, Clock, Mail, User } from "lucide-react";
+import { PaymentPage } from "./PaymentPage";
 
-interface UserDetailsModalProps {
+interface TimeSlotDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   session: {
@@ -23,169 +22,243 @@ interface UserDetailsModalProps {
     title: string;
     duration: string;
     price: number;
-  };
-  selectedDate: string;
-  selectedTime: string;
-  paymentMethod: string;
-  total: number;
+  } | null;
 }
 
-export function UserDetailsModal({
+const timeSlots = [
+  "9:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "1:00 PM",
+  "2:00 PM",
+  "3:00 PM",
+  "4:00 PM",
+  "5:00 PM",
+];
+
+const dates = [
+  { date: "2024-01-15", day: "Mon", dayNum: "15" },
+  { date: "2024-01-16", day: "Tue", dayNum: "16" },
+  { date: "2024-01-17", day: "Wed", dayNum: "17" },
+  { date: "2024-01-18", day: "Thu", dayNum: "18" },
+  { date: "2024-01-19", day: "Fri", dayNum: "19" },
+  { date: "2024-01-22", day: "Mon", dayNum: "22" },
+  { date: "2024-01-23", day: "Tue", dayNum: "23" },
+];
+
+const moods = [
+  "😊 Happy",
+  "👋 Just need company",
+  "😌 Calm but want to talk",
+  "😴 Tired",
+  "😢 Sad",
+  "😟 Anxious",
+  "💭 Heavy",
+];
+
+export function TimeSlotDrawer({
   open,
   onOpenChange,
   session,
-  selectedDate,
-  selectedTime,
-  paymentMethod,
-  total,
-}: UserDetailsModalProps) {
-  const [formData, setFormData] = useState({
-    name: "",
-    email: "",
-    phone: "",
-    address: "",
-  });
-  const [showFinalPayment, setShowFinalPayment] = useState(false);
+}: TimeSlotDrawerProps) {
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedTime, setSelectedTime] = useState<string>("");
+  const [mood, setMood] = useState<string>("");
+  const [name, setName] = useState<string>("");
+  const [anonymous, setAnonymous] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const [showPayment, setShowPayment] = useState(false);
 
-  const handleInputChange = (field: string, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-  };
+  if (!session) return null;
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (formData.name && formData.email && formData.phone && formData.address) {
-      setShowFinalPayment(true);
+  const handleProceedToPay = () => {
+    if (selectedDate && selectedTime && mood && email) {
+      setShowPayment(true);
     }
   };
 
-  const isFormValid =
-    formData.name && formData.email && formData.phone && formData.address;
-
   return (
-    <>
-      <Dialog open={open && !showFinalPayment} onOpenChange={onOpenChange}>
-        <DialogContent className="sm:max-w-md rounded-2xl shadow-xl border-0 bg-gradient-to-br from-emerald-50 via-white to-teal-50">
-          <DialogHeader className="text-center space-y-2">
-            <DialogTitle className="flex items-center justify-center gap-2 text-xl font-semibold text-emerald-700">
-              <User className="h-5 w-5 text-emerald-600" />
-              Your Details
-            </DialogTitle>
-            <DialogDescription className="text-gray-600 text-sm">
-              Provide your contact information to continue with your booking
-            </DialogDescription>
-          </DialogHeader>
+    <Sheet open={open} onOpenChange={onOpenChange}>
+      <SheetContent className="w-full sm:max-w-3xl overflow-y-auto bg-gradient-to-b from-white to-gray-50 p-6">
+        {!showPayment ? (
+          <>
+            <SheetHeader>
+              <SheetTitle className="flex items-center gap-2 text-lg font-bold text-gray-800">
+                <Calendar className="h-5 w-5 text-emerald-500" />
+                Book Your Session
+              </SheetTitle>
+              <SheetDescription className="text-gray-600">
+                Fill out your details to confirm your{" "}
+                <span className="font-medium text-gray-900">
+                  {session.title}
+                </span>
+              </SheetDescription>
+            </SheetHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-5 mt-4">
-            {/* Full Name */}
-            <div className="space-y-2">
-              <Label
-                htmlFor="name"
-                className="text-sm font-medium text-gray-700"
-              >
-                Full Name *
-              </Label>
-              <div className="relative">
-                <User className="absolute left-3 top-3 h-4 w-4 text-emerald-500" />
-                <Input
-                  id="name"
-                  placeholder="Enter your full name"
-                  value={formData.name}
-                  onChange={(e) => handleInputChange("name", e.target.value)}
-                  className="pl-10 rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500"
-                  required
-                />
+            <div className="mt-6 space-y-8">
+              {/* Session Info */}
+              <Card className="shadow-md border border-gray-200 hover-lift">
+                <CardHeader className="pb-3">
+                  <CardTitle className="text-lg text-gray-900">
+                    {session.title}
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="pt-0 flex items-center justify-between">
+                  <div className="flex items-center gap-2 text-sm text-gray-600">
+                    <Clock className="h-4 w-4 text-emerald-500" />
+                    <span>{session.duration}</span>
+                  </div>
+                  <Badge
+                    variant="outline"
+                    className="text-lg font-semibold bg-gradient-to-r from-emerald-400 to-teal-400 text-white border-none px-4 py-1 rounded-md shadow-sm"
+                  >
+                    ${session.price}
+                  </Badge>
+                </CardContent>
+              </Card>
+
+              {/* Date Selection */}
+              <div className="space-y-4">
+                <h3 className="font-semibold text-gray-800 text-sm uppercase tracking-wide">
+                  Select Date
+                </h3>
+                <div className="grid grid-cols-7 gap-2">
+                  {dates.map((dateObj) => (
+                    <button
+                      key={dateObj.date}
+                      onClick={() => setSelectedDate(dateObj.date)}
+                      className={`p-3 rounded-xl text-center text-sm font-medium transition-all duration-200 border ${
+                        selectedDate === dateObj.date
+                          ? "bg-gradient-to-r from-emerald-400 to-teal-400 text-white shadow-md scale-105"
+                          : "bg-white hover:bg-gray-100 text-gray-700 border-gray-200"
+                      }`}
+                    >
+                      <div className="text-xs opacity-70">{dateObj.day}</div>
+                      <div className="text-base font-bold">
+                        {dateObj.dayNum}
+                      </div>
+                    </button>
+                  ))}
+                </div>
               </div>
+
+              {/* Time Selection */}
+              {selectedDate && (
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-gray-800 text-sm uppercase tracking-wide">
+                    Select Time
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    {timeSlots.map((time) => (
+                      <button
+                        key={time}
+                        onClick={() => setSelectedTime(time)}
+                        className={`p-3 rounded-lg text-center text-sm font-medium transition-all duration-200 border ${
+                          selectedTime === time
+                            ? "bg-gradient-to-r from-emerald-400 to-teal-400 text-white shadow-md scale-105"
+                            : "bg-white hover:bg-gray-100 text-gray-700 border-gray-200"
+                        }`}
+                      >
+                        {time}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* Mood Checker */}
+              {selectedDate && selectedTime && (
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-gray-800 text-sm uppercase tracking-wide">
+                    How are you feeling?
+                  </h3>
+                  <div className="grid grid-cols-2 gap-3">
+                    {moods.map((option) => (
+                      <button
+                        key={option}
+                        onClick={() => setMood(option)}
+                        className={`p-3 rounded-lg text-center text-sm font-medium transition-all duration-200 border ${
+                          mood === option
+                            ? "bg-gradient-to-r from-emerald-400 to-teal-400 text-white shadow-md scale-105"
+                            : "bg-white hover:bg-gray-100 text-gray-700 border-gray-200"
+                        }`}
+                      >
+                        {option}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              {/* User Info */}
+              {mood && (
+                <div className="space-y-4">
+                  <h3 className="font-semibold text-gray-800 text-sm uppercase tracking-wide">
+                    Your Details
+                  </h3>
+                  <div className="space-y-3">
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                      <input
+                        type="text"
+                        placeholder="Your Name"
+                        value={name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full border rounded-lg p-3 pl-10"
+                        disabled={anonymous}
+                      />
+                    </div>
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="checkbox"
+                        checked={anonymous}
+                        onChange={(e) => {
+                          setAnonymous(e.target.checked);
+                          if (e.target.checked) setName("");
+                        }}
+                      />
+                      <span className="text-sm text-gray-600">
+                        Stay Anonymous
+                      </span>
+                    </div>
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-5 w-5 text-gray-400" />
+                      <input
+                        type="email"
+                        placeholder="Your Email (for confirmation)"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full border rounded-lg p-3 pl-10"
+                      />
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* Proceed Button */}
+              {selectedDate && selectedTime && mood && email && (
+                <Button
+                  className="w-full mt-6 bg-gradient-to-r from-emerald-500 to-teal-400 text-white text-lg py-6 rounded-xl shadow-lg hover:opacity-90 transition"
+                  size="lg"
+                  onClick={handleProceedToPay}
+                >
+                  Proceed to Pay - ${session.price}
+                </Button>
+              )}
             </div>
-
-            {/* Email */}
-            <div className="space-y-2">
-              <Label
-                htmlFor="email"
-                className="text-sm font-medium text-gray-700"
-              >
-                Email Address *
-              </Label>
-              <div className="relative">
-                <Mail className="absolute left-3 top-3 h-4 w-4 text-emerald-500" />
-                <Input
-                  id="email"
-                  type="email"
-                  placeholder="Enter your email"
-                  value={formData.email}
-                  onChange={(e) => handleInputChange("email", e.target.value)}
-                  className="pl-10 rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Phone */}
-            <div className="space-y-2">
-              <Label
-                htmlFor="phone"
-                className="text-sm font-medium text-gray-700"
-              >
-                Phone Number *
-              </Label>
-              <div className="relative">
-                <Phone className="absolute left-3 top-3 h-4 w-4 text-emerald-500" />
-                <Input
-                  id="phone"
-                  type="tel"
-                  placeholder="Enter your phone number"
-                  value={formData.phone}
-                  onChange={(e) => handleInputChange("phone", e.target.value)}
-                  className="pl-10 rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Address */}
-            <div className="space-y-2">
-              <Label
-                htmlFor="address"
-                className="text-sm font-medium text-gray-700"
-              >
-                Address *
-              </Label>
-              <div className="relative">
-                <MapPin className="absolute left-3 top-3 h-4 w-4 text-emerald-500" />
-                <Input
-                  id="address"
-                  placeholder="Enter your address"
-                  value={formData.address}
-                  onChange={(e) => handleInputChange("address", e.target.value)}
-                  className="pl-10 rounded-xl border-gray-300 focus:border-emerald-500 focus:ring-emerald-500"
-                  required
-                />
-              </div>
-            </div>
-
-            {/* Continue Button */}
-            <Button
-              type="submit"
-              className="w-full bg-gradient-to-r from-emerald-500 via-emerald-600 to-teal-500 text-white rounded-xl shadow-md hover:opacity-90 transition-all"
-              disabled={!isFormValid}
-            >
-              <CreditCard className="h-4 w-4 mr-2" />
-              Continue to Payment
-            </Button>
-          </form>
-        </DialogContent>
-      </Dialog>
-
-      {/* Final Payment Page */}
-      <FinalPaymentPage
-        open={showFinalPayment}
-        onOpenChange={setShowFinalPayment}
-        session={session}
-        selectedDate={selectedDate}
-        selectedTime={selectedTime}
-        paymentMethod={paymentMethod}
-        total={total}
-        userDetails={formData}
-      />
-    </>
+          </>
+        ) : (
+          <PaymentPage
+            session={session}
+            selectedDate={selectedDate}
+            selectedTime={selectedTime}
+            mood={mood}
+            name={anonymous ? "Anonymous" : name}
+            email={email}
+            onBack={() => setShowPayment(false)}
+          />
+        )}
+      </SheetContent>
+    </Sheet>
   );
 }
