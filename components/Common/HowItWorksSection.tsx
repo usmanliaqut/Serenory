@@ -1,5 +1,6 @@
 import React from "react";
 import { Clock, MessageCircle, Heart, ArrowRight } from "lucide-react";
+import { Button } from "../ui/button";
 
 const HowItWorksSection: React.FC = () => {
   const steps = [
@@ -72,7 +73,7 @@ const HowItWorksSection: React.FC = () => {
 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             <span className="block">Simple steps to</span>
-            <span className="block bg-gradient-to-r from-emerald-600 via-blue-600 to-emerald-700 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">
               feeling heard.
             </span>
           </h2>
@@ -138,9 +139,9 @@ const HowItWorksSection: React.FC = () => {
               <div className="w-2 h-2 bg-emerald-500 rounded-full animate-pulse"></div>
               <span className="text-gray-700 font-medium">Ready to begin?</span>
             </div>
-            <button className="bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white px-6 py-2 rounded-xl font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
+            <Button className=" px-6 py-2 rounded-xl font-semibold transition-all duration-300 hover:scale-105 shadow-lg">
               Start Your Session
-            </button>
+            </Button>
           </div>
         </div>
 
