@@ -87,8 +87,6 @@ export function BookingDrawer({
   onOpenChange,
   session,
 }: BookingDrawerProps) {
-  console.log("session", session);
-
   const [selectedDate, setSelectedDate] = useState<string>("");
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [mood, setMood] = useState<MoodKey | "">("");
@@ -146,9 +144,9 @@ export function BookingDrawer({
               price_data: {
                 currency: "usd",
                 product_data: {
-                  name: "Therapy Session",
+                  name: session?.title || "Serenory Session",
                 },
-                unit_amount: 5000,
+                unit_amount: (session?.price || 0) * 100,
               },
               quantity: 1,
             },
@@ -157,7 +155,6 @@ export function BookingDrawer({
       });
 
       const data = await res.json();
-
       const stripe = await stripePromise;
       await stripe?.redirectToCheckout({ sessionId: data.sessionId });
     } catch (err) {
