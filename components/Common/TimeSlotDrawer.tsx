@@ -66,15 +66,29 @@ const TIME_SLOTS = [
   "9:00 PM",
 ];
 
-const FEELINGS = [
-  { key: "peaceful", label: "Feeling peaceful, want to share", Icon: Smile },
-  { key: "company", label: "Just need someone to listen", Icon: Users },
-  { key: "talk", label: "Need to talk through something", Icon: MessageCircle },
-  { key: "tired", label: "Emotionally tired", Icon: Moon },
-  { key: "sad", label: "Feeling sad or down", Icon: Frown },
-  { key: "anxious", label: "Feeling anxious or worried", Icon: AlertTriangle },
-  { key: "overwhelmed", label: "Feeling overwhelmed", Icon: Cloud },
-] as const;
+// lucide-react icons are React components that accept SVG props
+import type { LucideIcon } from "lucide-react";
+type IconType = LucideIcon;
+
+const FEELINGS: {
+  key: "light" | "heavy";
+  emoji: string;
+  label: string;
+  Icon: IconType;
+}[] = [
+  {
+    key: "light",
+    emoji: "🙂",
+    label: "Feeling light — happy to share",
+    Icon: Smile,
+  },
+  {
+    key: "heavy",
+    emoji: "🪨",
+    label: "Carrying something heavy — need a quiet ear",
+    Icon: Frown,
+  },
+];
 
 type FeelingKey = (typeof FEELINGS)[number]["key"];
 type PaymentMethod = "stripe" | "paypal";

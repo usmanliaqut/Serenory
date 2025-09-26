@@ -1,29 +1,6 @@
 "use client";
 import React, { useState } from "react";
-import { Button } from "@/components/ui/button";
-import {
-  Card,
-  CardDescription,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import {
-  Calendar,
-  Clock,
-  Shield,
-  MessageCircle,
-  Star,
-  Users,
-  CheckCircle,
-  Phone,
-  Mail,
-  MapPin,
-  Heart,
-} from "lucide-react";
-import Image from "next/image";
-import { ValuePromise } from "../Global/ValuePromise";
-import Link from "next/link";
+import { Clock, Shield, MessageCircle } from "lucide-react";
 import HeroSection from "./ HeroSection";
 import HowItWorksSection from "./HowItWorksSection";
 import PricingSection from "./PricingSection";

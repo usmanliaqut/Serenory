@@ -9,7 +9,7 @@ import "./globals.css";
 export const metadata: Metadata = {
   title: "The calm in the conversation.",
   description:
-    "Serenory is the quiet online space to talk freely and feel heard. Private 15, 30, or 60-minute sessions. Confidential, calm, non-clinical",
+    "Serenory is the quiet online space to talk freely and feel heard. Private 15, 30, or 60-minute sessions. Confidential, calm, non-clinical.",
   generator: "default",
 };
 

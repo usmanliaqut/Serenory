@@ -2,27 +2,19 @@ import React from "react";
 import { Calendar, Heart, Shield, Smile, Users } from "lucide-react";
 import { Button } from "../ui/button";
 import FeatureCard from "../Global/FeatureCard";
+import { TAGLINES } from "@/constants/taglines";
 
 const HeroSection: React.FC = () => {
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
-      {/* Enhanced Background */}
+      {/* Background layers */}
       <div className="absolute inset-0">
-        {/* Base gradient */}
         <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/30 to-emerald-50/20" />
-
-        {/* Serene background image */}
         <div
           className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-25"
-          style={{
-            backgroundImage: "url('/serenaimage.jpeg')",
-          }}
+          style={{ backgroundImage: "url('/serenaimage.jpeg')" }}
         />
-
-        {/* Overlay for better text readability */}
         <div className="absolute inset-0 bg-white/40 backdrop-blur-[0.5px]" />
-
-        {/* Soft radial glows */}
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(59,130,246,0.08),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(16,185,129,0.06),transparent_60%)]" />
         <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,69,19,0.04),transparent_70%)]" />
@@ -57,18 +49,19 @@ const HeroSection: React.FC = () => {
             </span>
           </div>
 
-          {/* Main Headline */}
+          {/* Main Headline (Hero tagline) */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-8 leading-tight">
             <span className="block text-gray-900 drop-shadow-sm">
-              The quiet space
+              {TAGLINES.hero.split(" ")[0]}{" "}
+              {TAGLINES.hero.split(" ").slice(1, 3).join(" ")}
             </span>
             <span className="block bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-400 bg-clip-text text-transparent drop-shadow-md">
-              for your story.
+              {TAGLINES.hero.split(" ").slice(3).join(" ")}
             </span>
           </h1>
 
           {/* Subline */}
-          <p className="text-xl md:text-2xl   text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed font-medium">
+          <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed font-medium">
             No forms. No waiting. Just the simple power of being heard.
           </p>
 
@@ -82,7 +75,7 @@ const HeroSection: React.FC = () => {
                   .getElementById("pricing")
                   ?.scrollIntoView({ behavior: "smooth" });
               }}
-              className="group relative overflow-hidden  px-10 py-4 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0"
+              className="group relative overflow-hidden px-10 py-4 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <Calendar className="w-6 h-6 mr-3" />
@@ -130,7 +123,6 @@ const HeroSection: React.FC = () => {
               title="Confidential & Anonymous"
               description="Your privacy is sacred. No personal information required."
             />
-
             <FeatureCard
               icon={
                 <div className="w-12 h-12 bg-gradient-to-br from-blue-500 to-blue-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -140,7 +132,6 @@ const HeroSection: React.FC = () => {
               title="Non-Judgmental Listening"
               description="A safe space where you can share without fear of judgment."
             />
-
             <FeatureCard
               icon={
                 <div className="w-12 h-12 bg-gradient-to-br from-amber-500 to-orange-500 rounded-xl flex items-center justify-center shadow-lg">
@@ -150,7 +141,6 @@ const HeroSection: React.FC = () => {
               title="Accessible & Simple (no waitlists)"
               description="Caring listeners ready when you need to be heard most."
             />
-
             <FeatureCard
               icon={
                 <div className="w-12 h-12 bg-gradient-to-br from-purple-500 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg">
@@ -161,17 +151,9 @@ const HeroSection: React.FC = () => {
               description="Whatever you’re feeling, Serenory is here to listen without limits."
             />
           </div>
-
-          {/* Secondary tagline */}
-          <div className="mt-16 text-center">
-            <p className="text-lg text-gray-500 font-light italic">
-              "Talk freely. Feel heard."
-            </p>
-          </div>
         </div>
       </div>
 
-      {/* Subtle bottom fade */}
       <div className="absolute bottom-0 left-0 right-0 h-32 bg-gradient-to-t from-white/50 to-transparent pointer-events-none"></div>
     </section>
   );

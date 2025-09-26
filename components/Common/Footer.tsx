@@ -59,19 +59,20 @@ const Footer = () => {
           <div className="md:col-span-2">
             {/* Enhanced Brand Section */}
             <div className="mb-8">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center space-x-4 mb-4">
                 <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-lg flex items-center justify-center animate-pulse">
-                    <MessageCircle className="w-5 h-5 text-primary-foreground" />
+                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 via-teal-500 to-blue-400 rounded-2xl flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-300/30 via-transparent to-blue-300/30 rounded-2xl"></div>
+                    <MessageCircle className="w-7 h-7 text-white relative z-10" />
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-teal-300 to-blue-300 rounded-full opacity-60"></div>
                   </div>
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-teal-400 to-teal-500 rounded-full opacity-70 animate-pulse"></div>
                 </div>
                 <div>
-                  <span className="text-2xl font-bold text-white">
+                  <span className="text-3xl font-bold  bg-clip-text text-white">
                     Serenory
                   </span>
-                  <div className="text-sm text-teal-200 font-medium tracking-wider uppercase">
-                    Emotional Wellness
+                  <div className="text-xs text-white font-medium tracking-wide">
+                    Talk freely. Feel heard.
                   </div>
                 </div>
               </div>
