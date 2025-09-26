@@ -65,7 +65,7 @@ const HeroSection: React.FC = () => {
           {/* Main Headline */}
           <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-8 leading-tight">
             <span className="block">The quiet space</span>
-            <span className="block bg-gradient-to-r from-emerald-600 via-blue-600 to-emerald-700 bg-clip-text text-transparent">
+            <span className="block bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">
               for your story.
             </span>
           </h1>
@@ -80,7 +80,7 @@ const HeroSection: React.FC = () => {
             <Button
               size="lg"
               onClick={handleClick}
-              className="group relative overflow-hidden bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white px-10 py-4 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0"
+              className="group relative overflow-hidden  px-10 py-4 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <Calendar className="w-6 h-6 mr-3" />
