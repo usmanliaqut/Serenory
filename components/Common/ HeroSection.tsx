@@ -58,15 +58,17 @@ const HeroSection: React.FC = () => {
           </div>
 
           {/* Main Headline */}
-          <h1 className="text-5xl md:text-7xl lg:text-8xl font-bold text-gray-900 mb-8 leading-tight">
-            <span className="block">The quiet space</span>
-            <span className="block bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">
+          <h1 className="text-5xl md:text-7xl lg:text-8xl font-extrabold tracking-tight mb-8 leading-tight">
+            <span className="block text-gray-900 drop-shadow-sm">
+              The quiet space
+            </span>
+            <span className="block bg-gradient-to-r from-emerald-500 via-teal-500 to-cyan-400 bg-clip-text text-transparent drop-shadow-md">
               for your story.
             </span>
           </h1>
 
           {/* Subline */}
-          <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
+          <p className="text-xl md:text-2xl   text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed font-medium">
             No forms. No waiting. Just the simple power of being heard.
           </p>
 
@@ -84,7 +86,7 @@ const HeroSection: React.FC = () => {
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               <Calendar className="w-6 h-6 mr-3" />
-              Begin Your Session
+              Book Session
             </Button>
 
             <button
