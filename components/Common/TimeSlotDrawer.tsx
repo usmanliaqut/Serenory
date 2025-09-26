@@ -445,7 +445,7 @@ export function BookingDrawer({
                     <Button
                       onClick={() => setStep(2)}
                       disabled={!canProceedDetails}
-                      className="w-full bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="w-full  text-white py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       Review Your Session
                     </Button>
@@ -522,14 +522,14 @@ export function BookingDrawer({
                       >
                         <div className="flex items-center gap-3 mb-2">
                           <CreditCard className="w-5 h-5" />
-                          <span className="font-semibold">Credit Card</span>
+                          <span className="font-semibold">Stripe</span>
                         </div>
                         <p className="text-sm text-gray-600">
                           Secure payment with Stripe
                         </p>
                       </button>
 
-                      <button
+                      {/* <button
                         onClick={() => setPayment("paypal")}
                         className={`p-4 rounded-xl border-2 text-left transition-all duration-200 ${
                           payment === "paypal"
@@ -544,7 +544,7 @@ export function BookingDrawer({
                         <p className="text-sm text-gray-600">
                           Pay with your PayPal account
                         </p>
-                      </button>
+                      </button> */}
                     </div>
                   </div>
 
@@ -560,7 +560,7 @@ export function BookingDrawer({
                     <Button
                       onClick={handleConfirmAndPay}
                       disabled={!canSubmit || submitting}
-                      className="flex-1 bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="flex-1  text-white py-3 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       {submitting
                         ? "Processing..."
