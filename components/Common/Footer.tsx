@@ -1,76 +1,248 @@
-import { MessageCircle, Phone, Mail, MapPin } from "lucide-react";
 import React from "react";
+import {
+  MessageCircle,
+  Phone,
+  Mail,
+  MapPin,
+  Heart,
+  Shield,
+  Clock,
+  Users,
+} from "lucide-react";
 
 const Footer = () => {
+  const currentYear = new Date().getFullYear();
+
   return (
-    <>
-      <footer id="contact" className="bg-card border-t border-border">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
-          <div className="grid md:grid-cols-4 gap-8">
-            <div className="md:col-span-2">
-              <div className="flex items-center space-x-2 mb-4">
-                <div className="w-8 h-8 bg-primary rounded-lg flex items-center justify-center">
-                  <MessageCircle className="w-5 h-5 text-primary-foreground" />
+    <footer id="contact" className="relative overflow-hidden">
+      {/* Enhanced Background */}
+      <div className="absolute inset-0">
+        {/* Base gradient */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-800 via-teal-900 to-indigo-900" />
+
+        {/* Serene night background - peaceful starry sky */}
+        <div
+          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-25"
+          style={{
+            backgroundImage:
+              "url('https://images.pexels.com/photos/1624496/pexels-photo-1624496.jpeg?auto=compress&cs=tinysrgb&w=1920&h=1080&fit=crop')",
+          }}
+        />
+
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-900/60 via-teal-900/50 to-indigo-900/60" />
+
+        {/* Soft radial glows */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_20%,rgba(20,184,166,0.15),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_80%,rgba(99,102,241,0.12),transparent_60%)]" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(71,85,105,0.10),transparent_70%)]" />
+
+        {/* Floating elements */}
+        <div
+          className="absolute top-1/4 left-1/6 w-24 h-24 bg-teal-300/10 rounded-full blur-2xl animate-pulse"
+          style={{ animationDuration: "4s" }}
+        />
+        <div
+          className="absolute bottom-1/3 right-1/5 w-20 h-20 bg-indigo-300/8 rounded-full blur-xl animate-pulse"
+          style={{ animationDuration: "6s", animationDelay: "2s" }}
+        />
+        <div
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-16 h-16 bg-slate-300/6 rounded-full blur-lg animate-pulse"
+          style={{ animationDuration: "5s", animationDelay: "1s" }}
+        />
+      </div>
+
+      {/* Content */}
+      <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-16 relative z-10">
+        <div className="grid md:grid-cols-4 gap-8">
+          {/* Brand / About */}
+          <div className="md:col-span-2">
+            {/* Enhanced Brand Section */}
+            <div className="mb-8">
+              <div className="flex items-center gap-3 mb-6">
+                <div className="relative">
+                  <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-lg flex items-center justify-center animate-pulse">
+                    <MessageCircle className="w-5 h-5 text-primary-foreground" />
+                  </div>
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-teal-400 to-teal-500 rounded-full opacity-70 animate-pulse"></div>
                 </div>
-                <span className="text-xl font-bold text-foreground">
-                  A Safe Space to Talk
-                </span>
+                <div>
+                  <span className="text-2xl font-bold text-white">
+                    Serenory
+                  </span>
+                  <div className="text-sm text-teal-200 font-medium tracking-wider uppercase">
+                    Emotional Wellness
+                  </div>
+                </div>
               </div>
-              <p className="text-muted-foreground mb-6 max-w-md">
-                Private 1-on-1 sessions in a safe, confidential environment.
-                Easy booking for your convenience.
+
+              <p className="text-slate-200 mb-6 max-w-md leading-relaxed">
+                A gentle space for your thoughts. We provide confidential
+                listening sessions where you can share freely and feel truly
+                heard. Not therapy or medical care—just the simple power of
+                human connection.
               </p>
-              <div className="space-y-3">
-                <div className="flex items-center space-x-3">
-                  <Phone className="w-5 h-5 text-primary" />
-                  <span className="text-muted-foreground">(555) 123-4567</span>
+
+              {/* Trust Indicators */}
+              <div className="grid grid-cols-2 gap-4 mb-6">
+                <div className="flex items-center gap-2 text-sm text-slate-300">
+                  <Shield className="w-4 h-4 text-teal-400" />
+                  <span>Completely Anonymous</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <Mail className="w-5 h-5 text-primary" />
-                  <span className="text-muted-foreground">
-                    hello@safespacetotak.com
-                  </span>
+                <div className="flex items-center gap-2 text-sm text-slate-300">
+                  <Heart className="w-4 h-4 text-teal-400" />
+                  <span>Non-Judgmental</span>
                 </div>
-                <div className="flex items-center space-x-3">
-                  <MapPin className="w-5 h-5 text-primary" />
-                  <span className="text-muted-foreground">
-                    Available Online Worldwide
-                  </span>
+                <div className="flex items-center gap-2 text-sm text-slate-300">
+                  <Clock className="w-4 h-4 text-teal-400" />
+                  <span>Available 24/7</span>
+                </div>
+                <div className="flex items-center gap-2 text-sm text-slate-300">
+                  <Users className="w-4 h-4 text-teal-400" />
+                  <span>Caring Listeners</span>
                 </div>
               </div>
             </div>
 
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">Services</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>1-on-1 Sessions</li>
-                <li>Flexible Scheduling</li>
-                <li>Secure Platform</li>
-                <li>Easy Booking</li>
-                <li>Session Packages</li>
-                <li>Monthly Plans</li>
-              </ul>
-            </div>
-
-            <div>
-              <h3 className="font-semibold text-foreground mb-4">Support</h3>
-              <ul className="space-y-2 text-muted-foreground">
-                <li>Contact Us</li>
-                <li>FAQ</li>
-                <li>Privacy Policy</li>
-                <li>Terms of Service</li>
-                <li>Booking Help</li>
-                <li>Technical Support</li>
-              </ul>
+            {/* Contact Information */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-2xl p-6 border border-white/20 shadow-xl">
+              <h4 className="text-lg font-semibold text-white mb-4 flex items-center gap-2">
+                <MessageCircle className="w-5 h-5 text-teal-400" />
+                Get in Touch
+              </h4>
+              <div className="space-y-3">
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-teal-500/20 rounded-lg flex items-center justify-center">
+                    <Mail className="w-4 h-4 text-teal-400" />
+                  </div>
+                  <span className="text-slate-200">hello@serenory.com</span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center">
+                    <MapPin className="w-4 h-4 text-indigo-400" />
+                  </div>
+                  <span className="text-slate-200">Available worldwide</span>
+                </div>
+              </div>
             </div>
           </div>
 
-          <div className="border-t border-border mt-8 pt-8 text-center text-muted-foreground">
-            <p>&copy; 2024 A Safe Space to Talk. All rights reserved.</p>
+          {/* Services */}
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 shadow-lg hover:bg-white/10 transition-all duration-300">
+            <h3 className="font-bold text-white mb-6 flex items-center gap-2">
+              <div className="w-6 h-6 bg-gradient-to-r from-teal-500 to-teal-600 rounded-lg flex items-center justify-center">
+                <Heart className="w-3 h-3 text-white" />
+              </div>
+              Our Services
+            </h3>
+            <ul className="space-y-3 text-slate-300">
+              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200">
+                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
+                Single Listening Sessions
+              </li>
+              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200">
+                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
+                Wellness Packages
+              </li>
+              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200">
+                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
+                Extended Sessions
+              </li>
+              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200">
+                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
+                Flexible Scheduling
+              </li>
+              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200">
+                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
+                Anonymous Support
+              </li>
+              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200">
+                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
+                Secure Platform
+              </li>
+            </ul>
+          </div>
+
+          {/* Support */}
+          <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 shadow-lg hover:bg-white/10 transition-all duration-300">
+            <h3 className="font-bold text-white mb-6 flex items-center gap-2">
+              <div className="w-6 h-6 bg-gradient-to-r from-indigo-500 to-indigo-600 rounded-lg flex items-center justify-center">
+                <Shield className="w-3 h-3 text-white" />
+              </div>
+              Support & Info
+            </h3>
+            <ul className="space-y-3 text-slate-300">
+              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
+                <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
+                How It Works
+              </li>
+              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
+                <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
+                Frequently Asked Questions
+              </li>
+              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
+                <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
+                Privacy & Confidentiality
+              </li>
+              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
+                <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
+                Community Guidelines
+              </li>
+              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
+                <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
+                Booking Support
+              </li>
+              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
+                <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
+                Contact Us
+              </li>
+            </ul>
           </div>
         </div>
-      </footer>
-    </>
+
+        {/* Enhanced Bottom Section */}
+        <div className="mt-16 pt-8 border-t border-white/20">
+          <div className="flex flex-col md:flex-row items-center justify-between gap-6">
+            <div className="text-center md:text-left">
+              <p className="text-slate-300 mb-2">
+                &copy; {currentYear} Serenory. All rights reserved.
+              </p>
+              <p className="text-sm text-slate-400 italic">
+                "The calm in the conversation."
+              </p>
+            </div>
+
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/20">
+              <p className="text-sm text-slate-200 font-medium text-center">
+                🌟 Trusted by 2,400+ people seeking to be heard
+              </p>
+            </div>
+          </div>
+        </div>
+
+        {/* Important Disclaimer */}
+        <div className="mt-8 bg-amber-500/10 backdrop-blur-sm rounded-2xl p-6 border border-amber-400/20">
+          <div className="flex items-start gap-3">
+            <Shield className="w-6 h-6 text-amber-400 mt-1 flex-shrink-0" />
+            <div>
+              <h4 className="font-semibold text-amber-200 mb-2">
+                Important Notice
+              </h4>
+              <p className="text-amber-100 text-sm leading-relaxed">
+                Serenory provides emotional wellness support through listening
+                sessions. We are not a therapy, counseling, medical, or
+                emergency service. If you're experiencing a mental health
+                crisis, please contact your local emergency services or a
+                qualified mental health professional.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Subtle bottom fade */}
+      <div className="absolute bottom-0 left-0 right-0 h-16 bg-gradient-to-t from-black/20 to-transparent pointer-events-none"></div>
+    </footer>
   );
 };
 

@@ -1,159 +1,733 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Badge } from "@/components/ui/badge";
-import { Separator } from "@/components/ui/separator";
-import { Calendar, Clock, CreditCard, ChevronLeft, User } from "lucide-react";
-import { UserDetailsModal } from "../Modal/UsersModal";
+import {
+  Sheet,
+  SheetContent,
+  SheetDescription,
+  SheetHeader,
+  SheetTitle,
+} from "@/components/ui/sheet";
+import {
+  Calendar,
+  Clock,
+  Mail,
+  User,
+  ShieldCheck,
+  CreditCard,
+  DollarSign,
+  Smile,
+  Users,
+  MessageCircle,
+  Moon,
+  Frown,
+  AlertTriangle,
+  Cloud,
+} from "lucide-react";
 
-interface PaymentPageProps {
-  session: {
-    id: number;
-    title: string;
-    duration: string;
-    price: number;
-  };
-  selectedDate: string;
-  selectedTime: string;
-  onBack: () => void;
+type SessionType = "Drift" | "Anchor" | "Haven";
+
+interface BookingDrawerProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+  session: SessionOption; // selected session passed from parent
 }
 
-const paymentMethods = [{ id: "card", name: "Stripe", icon: CreditCard }];
+interface SessionOption {
+  id: SessionType;
+  title: string;
+  duration: string;
+  price: number;
+  blurb: string;
+}
 
-export function PaymentPage({
+// Utility: generate next 14 days
+function getNextDays(count = 14) {
+  const days: { date: string; weekday: string; dayNum: string }[] = [];
+  const now = new Date();
+  for (let i = 0; i < count; i++) {
+    const d = new Date(now);
+    d.setDate(now.getDate() + i);
+    const weekday = d.toLocaleDateString("en-US", { weekday: "short" });
+    const dayNum = d.getDate().toString();
+    const dateStr = d.toISOString().slice(0, 10); // YYYY-MM-DD
+    days.push({ date: dateStr, weekday, dayNum });
+  }
+  return days;
+}
+
+// Utility: simple static slots
+const TIME_SLOTS = [
+  "9:00 AM",
+  "10:00 AM",
+  "11:00 AM",
+  "1:00 PM",
+  "2:00 PM",
+  "3:00 PM",
+  "4:00 PM",
+  "5:00 PM",
+];
+
+const MOODS = [
+  { key: "happy", label: "Happy", Icon: Smile },
+  { key: "company", label: "Just need company", Icon: Users },
+  { key: "calm-talk", label: "Calm but want to talk", Icon: MessageCircle },
+  { key: "tired", label: "Tired", Icon: Moon },
+  { key: "sad", label: "Sad", Icon: Frown },
+  { key: "anxious", label: "Anxious", Icon: AlertTriangle },
+  { key: "heavy", label: "Heavy", Icon: Cloud },
+] as const;
+
+type MoodKey = (typeof MOODS)[number]["key"];
+
+type PaymentMethod = "stripe" | "paypal";
+
+export function BookingDrawer({
+  open,
+  onOpenChange,
   session,
-  selectedDate,
-  selectedTime,
-  onBack,
-}: PaymentPageProps) {
-  const [selectedPaymentMethod, setSelectedPaymentMethod] = useState("card");
-  const [showUserModal, setShowUserModal] = useState(false);
+}: BookingDrawerProps) {
+  // Selections
 
-  const formatDate = (dateString: string) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString("en-US", {
-      weekday: "long",
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-    });
+  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedTime, setSelectedTime] = useState<string>("");
+  const [mood, setMood] = useState<MoodKey | "">("");
+  const [name, setName] = useState<string>("");
+  const [anonymous, setAnonymous] = useState<boolean>(false);
+  const [email, setEmail] = useState<string>("");
+  const [payment, setPayment] = useState<PaymentMethod>("stripe");
+  const [step, setStep] = useState<1 | 2 | 3>(1);
+
+  // UI state
+  const [submitting, setSubmitting] = useState(false);
+  const [confirmed, setConfirmed] = useState(false);
+
+  const days = useMemo(() => getNextDays(14), []);
+
+  const isEmailValid = useMemo(() => {
+    if (!email) return false;
+    const re = /\S+@\S+\.\S+/;
+    return re.test(email);
+  }, [email]);
+
+  const canSubmit =
+    !!session && !!selectedDate && !!selectedTime && !!mood && isEmailValid;
+  const canProceedDetails = canSubmit;
+
+  const formatDateLong = (dateString: string) => {
+    try {
+      const d = new Date(dateString);
+      return d.toLocaleDateString("en-US", {
+        weekday: "long",
+        year: "numeric",
+        month: "long",
+        day: "numeric",
+      });
+    } catch {
+      return dateString;
+    }
   };
 
-  const serviceFee = Math.round(session.price * 0.05); // 5% service fee
-  const total = session.price + serviceFee;
+  const handleConfirmAndPay = async () => {
+    if (!canSubmit) return;
+    setSubmitting(true);
+    try {
+      if (payment === "paypal") {
+        const res = await fetch("/api/payments/paypal/create-order", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            amount: session?.price ?? 0,
+            email,
+            metadata: { sessionId: session.id, sessionTitle: session.title },
+          }),
+        });
+        if (!res.ok) throw new Error("PayPal order creation failed");
+        const data = await res.json();
+        if (data?.approvalUrl) {
+          window.location.href = data.approvalUrl;
+          return;
+        }
+      }
+      if (payment === "stripe") {
+        // Stripe card entry and confirmation handled by StripePaymentForm
+        return;
+      }
+      setConfirmed(true);
+    } catch (err) {
+      console.error("[v0] Payment error:", err);
+    } finally {
+      setSubmitting(false);
+    }
+  };
 
-  const handleContinue = () => {
-    setShowUserModal(true);
+  const resetAll = () => {
+    setSelectedDate("");
+    setSelectedTime("");
+    setMood("");
+    setName("");
+    setAnonymous(false);
+    setEmail("");
+    setPayment("stripe");
+    setConfirmed(false);
+    setStep(1);
   };
 
   return (
-    <>
-      <div className="space-y-6">
-        {/* Header */}
-        <div className="flex items-center gap-3">
-          <Button variant="ghost" size="sm" onClick={onBack}>
-            <ChevronLeft className="h-4 w-4" />
-          </Button>
-          <div>
-            <h2 className="text-xl font-semibold">Payment Details</h2>
-            <p className="text-sm text-muted-foreground">
-              Review and complete your booking
-            </p>
-          </div>
-        </div>
+    <Sheet
+      open={open}
+      onOpenChange={(v) => {
+        if (!v) resetAll();
+        onOpenChange(v);
+      }}
+    >
+      <SheetContent className="w-full sm:max-w-3xl overflow-y-auto bg-background p-6 md:p-8">
+        {!confirmed ? (
+          <>
+            <SheetHeader>
+              <SheetTitle className="text-xl font-semibold text-foreground">
+                Book a Session1
+              </SheetTitle>
+              <SheetDescription className="text-muted-foreground">
+                Fill in your details, then review and pay to confirm your
+                booking.
+              </SheetDescription>
+            </SheetHeader>
 
-        {/* Booking Summary */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Booking Summary</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-4">
-            <div>
-              <h3 className="font-semibold">{session.title}</h3>
-              <div className="flex items-center gap-4 mt-2 text-sm text-muted-foreground">
-                <div className="flex items-center gap-1">
-                  <Calendar className="h-4 w-4" />
-                  <span>{formatDate(selectedDate)}</span>
-                </div>
-                <div className="flex items-center gap-1">
-                  <Clock className="h-4 w-4" />
-                  <span>{selectedTime}</span>
-                </div>
+            {/* Modern stepper */}
+            <div className="mt-4">
+              <ol className="grid grid-cols-3 text-sm">
+                <li className="flex items-center gap-2 font-medium">
+                  <span
+                    className={`h-6 w-6 inline-flex items-center justify-center rounded-full border ${
+                      step >= 1
+                        ? "border-primary text-primary"
+                        : "border-border text-muted-foreground"
+                    }`}
+                  >
+                    1
+                  </span>
+                  Details
+                </li>
+                <li className="flex items-center gap-2 justify-center font-medium">
+                  <span
+                    className={`h-6 w-6 inline-flex items-center justify-center rounded-full border ${
+                      step >= 2
+                        ? "border-primary text-primary"
+                        : "border-border text-muted-foreground"
+                    }`}
+                  >
+                    2
+                  </span>
+                  Review & Pay
+                </li>
+                <li className="flex items-center gap-2 justify-end font-medium text-muted-foreground">
+                  <span className="h-6 w-6 inline-flex items-center justify-center rounded-full border border-border">
+                    3
+                  </span>
+                  Done
+                </li>
+              </ol>
+              <div className="mt-3 h-1 w-full bg-muted rounded">
+                <div
+                  className="h-1 bg-primary rounded transition-all"
+                  style={{
+                    width: step === 1 ? "33%" : step === 2 ? "66%" : "100%",
+                  }}
+                />
               </div>
             </div>
 
-            <Separator />
-
-            <div className="space-y-2">
-              <div className="flex justify-between">
-                <span>Session ({session.duration})</span>
-                <span>${session.price}</span>
-              </div>
-              <div className="flex justify-between text-sm text-muted-foreground">
-                <span>Service fee</span>
-                <span>${serviceFee}</span>
-              </div>
-              <Separator />
-              <div className="flex justify-between font-semibold text-lg">
-                <span>Total</span>
-                <span>${total}</span>
-              </div>
-            </div>
-          </CardContent>
-        </Card>
-
-        {/* Payment Methods */}
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-lg">Payment Method</CardTitle>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            {paymentMethods.map((method) => {
-              const Icon = method.icon;
-              return (
-                <button
-                  key={method.id}
-                  onClick={() => setSelectedPaymentMethod(method.id)}
-                  className={`w-full p-4 rounded-lg border text-left transition-colors ${
-                    selectedPaymentMethod === method.id
-                      ? "bg-primary/5 border-primary"
-                      : "bg-card hover:bg-muted border-border"
-                  }`}
-                >
-                  <div className="flex items-center gap-3">
-                    <Icon className="h-5 w-5" />
-                    <span className="font-medium">{method.name}</span>
-                    {selectedPaymentMethod === method.id && (
-                      <Badge variant="default" className="ml-auto">
-                        Selected
-                      </Badge>
-                    )}
+            {/* Split into two pages inside the drawer */}
+            {step === 1 ? (
+              <div className="mt-6 space-y-8">
+                {/* Date */}
+                <section aria-labelledby="date-select">
+                  <h3
+                    id="date-select"
+                    className="text-sm font-semibold uppercase tracking-wide text-foreground/80"
+                  >
+                    Select Date
+                  </h3>
+                  <div className="grid grid-cols-7 gap-2 mt-3">
+                    {days.map((d) => {
+                      const active = selectedDate === d.date;
+                      return (
+                        <button
+                          key={d.date}
+                          onClick={() => setSelectedDate(d.date)}
+                          className={[
+                            "rounded-lg border p-3 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                            active
+                              ? "border-primary bg-primary/5"
+                              : "border-border hover:bg-muted",
+                          ].join(" ")}
+                          aria-pressed={active}
+                          aria-label={`Select ${d.weekday} ${d.date}`}
+                        >
+                          <div className="text-xs text-muted-foreground">
+                            {d.weekday}
+                          </div>
+                          <div className="text-base font-semibold">
+                            {d.dayNum}
+                          </div>
+                        </button>
+                      );
+                    })}
                   </div>
-                </button>
-              );
-            })}
-          </CardContent>
-        </Card>
+                </section>
 
-        {/* Continue Button */}
-        <Button className="w-full" size="lg" onClick={handleContinue}>
-          <User className="h-4 w-4 mr-2" />
-          Continue to Details
-        </Button>
-      </div>
+                {/* Time */}
+                <section
+                  aria-labelledby="time-select"
+                  className={
+                    !selectedDate ? "opacity-50 pointer-events-none" : ""
+                  }
+                >
+                  <h3
+                    id="time-select"
+                    className="text-sm font-semibold uppercase tracking-wide text-foreground/80"
+                  >
+                    Select Time
+                  </h3>
+                  <div className="grid grid-cols-2 md:grid-cols-4 gap-2 mt-3">
+                    {TIME_SLOTS.map((t) => {
+                      const active = selectedTime === t;
+                      return (
+                        <button
+                          key={t}
+                          onClick={() => setSelectedTime(t)}
+                          className={[
+                            "rounded-lg border p-3 text-center transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                            active
+                              ? "border-primary bg-primary/5"
+                              : "border-border hover:bg-muted",
+                          ].join(" ")}
+                          aria-pressed={active}
+                          aria-label={`Select ${t}`}
+                          disabled={!selectedDate}
+                        >
+                          <span className="inline-flex items-center gap-2">
+                            <Clock className="h-4 w-4 text-primary" />
+                            {t}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
 
-      {/* User Details Modal */}
-      <UserDetailsModal
-        open={showUserModal}
-        onOpenChange={setShowUserModal}
-        session={session}
-        selectedDate={selectedDate}
-        selectedTime={selectedTime}
-        paymentMethod={selectedPaymentMethod}
-        total={total}
-      />
-    </>
+                {/* Mood */}
+                <section
+                  aria-labelledby="mood-select"
+                  className={
+                    !selectedTime ? "opacity-50 pointer-events-none" : ""
+                  }
+                >
+                  <h3
+                    id="mood-select"
+                    className="text-sm font-semibold uppercase tracking-wide text-foreground/80"
+                  >
+                    How are you feeling? (Required)
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mt-3">
+                    {MOODS.map((m) => {
+                      const active = mood === m.key;
+                      const Icon = m.Icon;
+                      return (
+                        <button
+                          key={m.key}
+                          onClick={() => setMood(m.key)}
+                          className={[
+                            "rounded-lg border p-3 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                            active
+                              ? "border-primary bg-primary/5"
+                              : "border-border hover:bg-muted",
+                          ].join(" ")}
+                          aria-pressed={active}
+                          aria-label={`${m.label}`}
+                          disabled={!selectedTime}
+                        >
+                          <span className="inline-flex items-center gap-3">
+                            <Icon className="h-5 w-5 text-primary" />
+                            <span className="font-medium">{m.label}</span>
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </section>
+
+                {/* Your Details */}
+                <section
+                  aria-labelledby="your-details"
+                  className={!mood ? "opacity-50 pointer-events-none" : ""}
+                >
+                  <h3
+                    id="your-details"
+                    className="text-sm font-semibold uppercase tracking-wide text-foreground/80"
+                  >
+                    Your Details
+                  </h3>
+                  <div className="grid gap-3 mt-3">
+                    <div className="relative">
+                      <User className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <input
+                        type="text"
+                        placeholder="Your name (optional if anonymous)"
+                        value={anonymous ? "" : name}
+                        onChange={(e) => setName(e.target.value)}
+                        className="w-full rounded-md border border-border bg-background p-3 pl-10 text-foreground"
+                        disabled={anonymous}
+                        aria-label="Your name"
+                      />
+                    </div>
+
+                    <label className="inline-flex items-center gap-2 text-sm text-foreground/80">
+                      <input
+                        type="checkbox"
+                        checked={anonymous}
+                        onChange={(e) => {
+                          setAnonymous(e.target.checked);
+                          if (e.target.checked) setName("");
+                        }}
+                        aria-label="Stay Anonymous"
+                      />
+                      Stay Anonymous
+                    </label>
+
+                    <div className="relative">
+                      <Mail className="absolute left-3 top-3 h-4 w-4 text-muted-foreground" />
+                      <input
+                        type="email"
+                        placeholder="Email for confirmation and reminders"
+                        value={email}
+                        onChange={(e) => setEmail(e.target.value)}
+                        className="w-full rounded-md border border-border bg-background p-3 pl-10 text-foreground"
+                        aria-label="Email address"
+                        required
+                      />
+                      {!isEmailValid && email.length > 0 && (
+                        <p className="mt-1 text-xs text-destructive">
+                          Please enter a valid email.
+                        </p>
+                      )}
+                    </div>
+                  </div>
+                </section>
+
+                {/* Next action */}
+                <div className="pt-2">
+                  <Button
+                    className="w-full"
+                    size="lg"
+                    onClick={() => setStep(2)}
+                    disabled={!canProceedDetails}
+                  >
+                    Review & Pay
+                  </Button>
+                </div>
+              </div>
+            ) : step === 2 ? (
+              // step === 2
+              <div className="mt-6 space-y-8">
+                {/* Summary */}
+                <Card className="border-border">
+                  <CardHeader>
+                    <CardTitle className="text-base">Summary</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center justify-between text-sm">
+                      <span className="inline-flex items-center gap-2">
+                        <Calendar className="h-4 w-4 text-primary" />
+                        {selectedDate ? formatDateLong(selectedDate) : "Date"}
+                      </span>
+                      <span className="inline-flex items-center gap-2">
+                        <Clock className="h-4 w-4 text-primary" />
+                        {selectedTime || "Time"}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>
+                        {session
+                          ? `${session.title} (${session.duration})`
+                          : "Session"}
+                      </span>
+                      <span className="font-semibold">
+                        {session ? `$${session.price}` : "-"}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Mood</span>
+                      <span className="text-muted-foreground inline-flex items-center gap-2">
+                        {mood ? (
+                          <>
+                            {(() => {
+                              const mm = MOODS.find((m) => m.key === mood);
+                              if (!mm) return null;
+                              const Icon = mm.Icon;
+                              return <Icon className="h-4 w-4 text-primary" />;
+                            })()}
+                            {MOODS.find((m) => m.key === mood)?.label}
+                          </>
+                        ) : (
+                          "-"
+                        )}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Name</span>
+                      <span className="text-muted-foreground">
+                        {anonymous ? "Anonymous" : name || "-"}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Email</span>
+                      <span className="text-muted-foreground">
+                        {email || "-"}
+                      </span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                {/* Payment */}
+                <section aria-labelledby="payment-method">
+                  <h3
+                    id="payment-method"
+                    className="text-sm font-semibold uppercase tracking-wide text-foreground/80"
+                  >
+                    Payment
+                  </h3>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mt-3">
+                    <button
+                      onClick={() => setPayment("stripe")}
+                      className={[
+                        "rounded-lg border p-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                        payment === "stripe"
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:bg-muted",
+                      ].join(" ")}
+                      aria-pressed={payment === "stripe"}
+                      aria-label="Pay with Stripe"
+                    >
+                      <span className="inline-flex items-center gap-3">
+                        <CreditCard className="h-5 w-5 text-primary" />
+                        <span className="font-medium">Stripe</span>
+                      </span>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        One‑off secure card payment
+                      </p>
+                    </button>
+
+                    <button
+                      onClick={() => setPayment("paypal")}
+                      className={[
+                        "rounded-lg border p-4 text-left transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary",
+                        payment === "paypal"
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:bg-muted",
+                      ].join(" ")}
+                      aria-pressed={payment === "paypal"}
+                      aria-label="Pay with PayPal"
+                    >
+                      <span className="inline-flex items-center gap-3">
+                        <DollarSign className="h-5 w-5 text-primary" />
+                        <span className="font-medium">PayPal</span>
+                      </span>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        One‑off payment with PayPal
+                      </p>
+                    </button>
+                  </div>
+
+                  {/* Inline method-specific UI */}
+                  {payment === "stripe" && <div className="mt-4"></div>}
+
+                  {payment === "paypal" && (
+                    <div className="mt-4">
+                      <Button
+                        onClick={handleConfirmAndPay}
+                        disabled={!canSubmit || submitting}
+                        className="w-full"
+                        size="lg"
+                      >
+                        {submitting
+                          ? "Redirecting..."
+                          : `Continue with PayPal - $${session?.price}`}
+                      </Button>
+                      <p className="text-xs text-muted-foreground mt-2">
+                        You’ll be redirected to PayPal Sandbox to approve the
+                        payment.
+                      </p>
+                    </div>
+                  )}
+                </section>
+
+                <div className="flex items-center gap-2">
+                  <Button
+                    variant="outline"
+                    className="flex-1 bg-transparent"
+                    onClick={() => setStep(1)}
+                  >
+                    Back
+                  </Button>
+                </div>
+
+                <p className="text-xs text-muted-foreground text-center">
+                  Payment is one-off. By booking, you agree to confidentiality
+                  and our community guidelines.
+                </p>
+              </div>
+            ) : (
+              // step === 3
+              <div className="mt-6 space-y-6">
+                <Card className="border-border">
+                  <CardHeader>
+                    <CardTitle className="text-base">Session Details</CardTitle>
+                  </CardHeader>
+                  <CardContent className="space-y-3">
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Session</span>
+                      <span className="font-medium">
+                        {session?.title} • {session?.duration} • $
+                        {session?.price}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Date</span>
+                      <span className="font-medium">
+                        {formatDateLong(selectedDate)}
+                      </span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Time</span>
+                      <span className="font-medium">{selectedTime}</span>
+                    </div>
+                    <div className="flex items-center justify-between text-sm">
+                      <span>Payment</span>
+                      <span className="font-medium capitalize">{payment}</span>
+                    </div>
+                  </CardContent>
+                </Card>
+
+                <div className="rounded-lg border border-border p-4 bg-muted/30">
+                  <div className="flex items-start gap-3">
+                    <ShieldCheck className="h-5 w-5 text-primary mt-0.5" />
+                    <div>
+                      <p className="font-medium">Confidentiality Reminder</p>
+                      <p className="text-sm text-muted-foreground mt-1">
+                        Your conversation is private. We respect your space and
+                        keep your details secure. If you need to reschedule,
+                        check your confirmation email for options.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <Button
+                    className="flex-1"
+                    onClick={() => onOpenChange(false)}
+                  >
+                    Close
+                  </Button>
+                  <Button
+                    variant="outline"
+                    className="flex-1 bg-transparent"
+                    onClick={() => {
+                      onOpenChange(false);
+                    }}
+                  >
+                    Add to Calendar
+                  </Button>
+                </div>
+
+                <p className="text-xs text-muted-foreground text-center">
+                  You’ll also receive a reminder email before your session.
+                </p>
+              </div>
+            )}
+          </>
+        ) : (
+          // confirmed
+          <>
+            <SheetHeader>
+              <SheetTitle className="text-xl font-semibold text-foreground">
+                You're booked!
+              </SheetTitle>
+              <SheetDescription className="text-muted-foreground">
+                Your session is confirmed. A confirmation email with the session
+                link and a calendar invite is on its way.
+              </SheetDescription>
+            </SheetHeader>
+
+            <div className="mt-6 space-y-6">
+              <Card className="border-border">
+                <CardHeader>
+                  <CardTitle className="text-base">Session Details</CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-3">
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Session</span>
+                    <span className="font-medium">
+                      {session?.title} • {session?.duration} • ${session?.price}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Date</span>
+                    <span className="font-medium">
+                      {formatDateLong(selectedDate)}
+                    </span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Time</span>
+                    <span className="font-medium">{selectedTime}</span>
+                  </div>
+                  <div className="flex items-center justify-between text-sm">
+                    <span>Payment</span>
+                    <span className="font-medium capitalize">{payment}</span>
+                  </div>
+                </CardContent>
+              </Card>
+
+              <div className="rounded-lg border border-border p-4 bg-muted/30">
+                <div className="flex items-start gap-3">
+                  <ShieldCheck className="h-5 w-5 text-primary mt-0.5" />
+                  <div>
+                    <p className="font-medium">Confidentiality Reminder</p>
+                    <p className="text-sm text-muted-foreground mt-1">
+                      Your conversation is private. We respect your space and
+                      keep your details secure. If you need to reschedule, check
+                      your confirmation email for options.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
+              <div className="flex items-center gap-2">
+                <Button className="flex-1" onClick={() => onOpenChange(false)}>
+                  Close
+                </Button>
+                <Button
+                  variant="outline"
+                  className="flex-1 bg-transparent"
+                  onClick={() => {
+                    onOpenChange(false);
+                  }}
+                >
+                  Add to Calendar
+                </Button>
+              </div>
+
+              <p className="text-xs text-muted-foreground text-center">
+                You’ll also receive a reminder email before your session.
+              </p>
+            </div>
+          </>
+        )}
+      </SheetContent>
+    </Sheet>
   );
 }
