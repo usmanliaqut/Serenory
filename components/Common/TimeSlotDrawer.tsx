@@ -445,7 +445,7 @@ export function BookingDrawer({
                     <Button
                       onClick={() => setStep(2)}
                       disabled={!canProceedDetails}
-                      className="w-full bg-gradient-to-r from-emerald-600 to-blue-600 hover:from-emerald-700 hover:to-blue-700 text-white py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
+                      className="w-full  text-white py-4 text-lg font-semibold rounded-xl shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       Review Your Session
                     </Button>
