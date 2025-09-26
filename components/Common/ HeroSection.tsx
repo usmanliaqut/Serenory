@@ -4,11 +4,6 @@ import { Button } from "../ui/button";
 import FeatureCard from "../Global/FeatureCard";
 
 const HeroSection: React.FC = () => {
-  const handleClick = () => {
-    // Handle session booking
-    console.log("Begin Your Session clicked");
-  };
-
   return (
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Enhanced Background */}
@@ -79,7 +74,12 @@ const HeroSection: React.FC = () => {
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
             <Button
               size="lg"
-              onClick={handleClick}
+              onClick={(e) => {
+                e.preventDefault();
+                document
+                  .getElementById("pricing")
+                  ?.scrollIntoView({ behavior: "smooth" });
+              }}
               className="group relative overflow-hidden  px-10 py-4 text-lg font-semibold rounded-2xl shadow-xl hover:shadow-2xl transform hover:scale-105 transition-all duration-300 border-0"
             >
               <div className="absolute inset-0 bg-gradient-to-r from-white/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>

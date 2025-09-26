@@ -21,7 +21,7 @@ const CTASection: React.FC<CTASectionProps> = ({ onBookSession }) => {
       {/* Enhanced Background */}
       <div className="absolute inset-0">
         {/* Base gradient */}
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-600 via-teal-800 to-indigo-800" />
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-600 via-teal-700 to-indigo-800" />
 
         {/* Serene nature background - peaceful mountain lake at golden hour */}
         <div
