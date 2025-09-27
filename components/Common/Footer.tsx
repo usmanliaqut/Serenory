@@ -59,19 +59,20 @@ const Footer = () => {
           <div className="md:col-span-2">
             {/* Enhanced Brand Section */}
             <div className="mb-8">
-              <div className="flex items-center gap-3 mb-6">
+              <div className="flex items-center space-x-4 mb-4">
                 <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-r from-emerald-500 to-teal-400 rounded-lg flex items-center justify-center animate-pulse">
-                    <MessageCircle className="w-5 h-5 text-primary-foreground" />
+                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 via-teal-500 to-blue-400 rounded-2xl flex items-center justify-center relative overflow-hidden">
+                    <div className="absolute inset-0 bg-gradient-to-br from-emerald-300/30 via-transparent to-blue-300/30 rounded-2xl"></div>
+                    <MessageCircle className="w-7 h-7 text-white relative z-10" />
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-teal-300 to-blue-300 rounded-full opacity-60"></div>
                   </div>
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-r from-teal-400 to-teal-500 rounded-full opacity-70 animate-pulse"></div>
                 </div>
                 <div>
-                  <span className="text-2xl font-bold text-white">
+                  <span className="text-3xl font-bold  bg-clip-text text-white">
                     Serenory
                   </span>
-                  <div className="text-sm text-teal-200 font-medium tracking-wider uppercase">
-                    Emotional Wellness
+                  <div className="text-xs text-white font-medium tracking-wide">
+                    Talk freely. Feel heard.
                   </div>
                 </div>
               </div>
@@ -87,7 +88,7 @@ const Footer = () => {
               <div className="grid grid-cols-2 gap-4 mb-6">
                 <div className="flex items-center gap-2 text-sm text-slate-300">
                   <Shield className="w-4 h-4 text-teal-400" />
-                  <span>Completely Anonymous</span>
+                  <span>Private & Confidential</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-slate-300">
                   <Heart className="w-4 h-4 text-teal-400" />
@@ -95,7 +96,7 @@ const Footer = () => {
                 </div>
                 <div className="flex items-center gap-2 text-sm text-slate-300">
                   <Clock className="w-4 h-4 text-teal-400" />
-                  <span>Available 24/7</span>
+                  <span>Flexible hours, same-day availability</span>
                 </div>
                 <div className="flex items-center gap-2 text-sm text-slate-300">
                   <Users className="w-4 h-4 text-teal-400" />
@@ -115,13 +116,13 @@ const Footer = () => {
                   <div className="w-8 h-8 bg-teal-500/20 rounded-lg flex items-center justify-center">
                     <Mail className="w-4 h-4 text-teal-400" />
                   </div>
-                  <span className="text-slate-200">hello@serenory.com</span>
+                  <span className="text-slate-200">hello@serenory.co</span>
                 </div>
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center">
                     <MapPin className="w-4 h-4 text-indigo-400" />
                   </div>
-                  <span className="text-slate-200">Available worldwide</span>
+                  <span className="text-slate-200">Accessible online</span>
                 </div>
               </div>
             </div>
@@ -174,27 +175,15 @@ const Footer = () => {
             <ul className="space-y-3 text-slate-300">
               <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
                 <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-                How It Works
+                Privacy Policy
               </li>
               <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
                 <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-                Frequently Asked Questions
+                Terms of Use
               </li>
               <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
                 <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-                Privacy & Confidentiality
-              </li>
-              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
-                <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-                Community Guidelines
-              </li>
-              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
-                <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-                Booking Support
-              </li>
-              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
-                <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-                Contact Us
+                Refund Policy
               </li>
             </ul>
           </div>
@@ -209,12 +198,6 @@ const Footer = () => {
               </p>
               <p className="text-sm text-slate-400 italic">
                 "The calm in the conversation."
-              </p>
-            </div>
-
-            <div className="bg-white/10 backdrop-blur-sm rounded-xl px-6 py-3 border border-white/20">
-              <p className="text-sm text-slate-200 font-medium text-center">
-                🌟 Trusted by 2,400+ people seeking to be heard
               </p>
             </div>
           </div>

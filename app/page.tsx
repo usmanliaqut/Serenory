@@ -1,5 +1,3 @@
-import Link from "next/link";
-import Image from "next/image";
 import AppNavbar from "@/components/Common/AppNavbar";
 import Footer from "@/components/Common/Footer";
 import BookingPlace from "@/components/Common/BookingPlace";

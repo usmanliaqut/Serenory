@@ -110,7 +110,7 @@ const CTASection: React.FC<CTASectionProps> = ({ onBookSession }) => {
           <div className="flex items-center gap-2 bg-white/15 backdrop-blur-sm rounded-full px-4 py-2 border border-white/20">
             <MessageCircle className="w-4 h-4 text-white" />
             <span className="text-sm text-white font-medium">
-              Available 24/7
+              Flexible hours, same-day availability
             </span>
           </div>
         </div>

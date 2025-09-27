@@ -21,7 +21,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
   const pricingOptions: PricingOption[] = [
     {
       id: 1,
-      title: "Serenory Drift",
+      title: "Drift",
       price: 5,
       duration: "15 minutes",
       description: "A gentle moment to share what's on your mind",
@@ -35,7 +35,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
     },
     {
       id: 2,
-      title: "Serenory Anchor",
+      title: "Anchor",
       price: 10,
       duration: "30 minutes",
       description: "A deeper space to explore and process your thoughts",
@@ -46,12 +46,12 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
         "Confidential & anonymous",
         "Voice, video, or text",
         "Non-judgmental listening",
-        "Optional Echo Note reflection",
+        "Optional Echo Note reflection (Coming soon...)",
       ],
     },
     {
       id: 3,
-      title: "Serenory Haven",
+      title: "Haven",
       price: 20,
       duration: "60 minutes",
       description:
@@ -62,7 +62,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
         "Confidential & anonymous",
         "Voice, video, or text",
         "Non-judgmental listening",
-        "Optional Echo Note reflection",
+        "Optional Echo Note reflection (Coming soon...)",
       ],
     },
   ];
@@ -128,9 +128,9 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
           </div>
 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
-            Simple, caring
+            Simple, Caring
             <span className="block bg-gradient-to-r from-emerald-500 to-teal-400 bg-clip-text text-transparent">
-              pricing.
+              Session Options.
             </span>
           </h2>
 
@@ -149,10 +149,10 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
                 Our Promise to You
               </h3>
               <p className="text-gray-600 leading-relaxed mb-6">
-                We believe everyone deserves to be heard. Our pricing reflects
-                our commitment to making emotional wellness accessible while
-                ensuring our companions can provide the quality presence you
-                deserve.
+                We believe everyone deserves to be heard. Session Options
+                reflects our commitment to making emotional wellness accessible
+                while ensuring our companions can provide the quality presence
+                you deserve.
               </p>
 
               <div className="space-y-3">
@@ -185,7 +185,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
                     <Check className="w-4 h-4 text-purple-600" />
                   </div>
                   <span className="text-gray-700 font-medium">
-                    Available 24/7 when you need us
+                    Flexible hours, same-day availability
                   </span>
                 </div>
               </div>
@@ -275,7 +275,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
                 } text-white shadow-lg hover:shadow-xl transition-all duration-300`}
                 prefix="📅"
               >
-                Book This Session
+                Choose This Option.
               </Button>
             </div>
           ))}
