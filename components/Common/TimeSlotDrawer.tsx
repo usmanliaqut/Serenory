@@ -160,6 +160,12 @@ export function BookingDrawer({
               quantity: 1,
             },
           ],
+          type: session?.title,
+          mood: feeling,
+          time: `${selectedDate}T${selectedTime}`,
+          name,
+          anonymous,
+          email,
         }),
       });
 
