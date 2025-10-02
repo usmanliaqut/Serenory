@@ -8,7 +8,8 @@ generator client {
 }
 
 model User {
-  id        String   @id @default(cuid())
+  id        String    @id @default(cuid())
+  email     String    @unique
   name      String?
   anonymous Boolean   @default(false)
   bookings  Booking[]
@@ -28,7 +29,7 @@ model Payment {
   id         String   @id @default(cuid())
   amount     Int
   status     String
+  stripeId   String   @unique // store stripe session/paymentIntent id
   bookingId  String   @unique
   booking    Booking  @relation(fields: [bookingId], references: [id])
 }
-
