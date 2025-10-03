@@ -1,0 +1,35 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model User {
+  id        String    @id @default(cuid())
+  email     String    @unique
+  name      String?
+  anonymous Boolean   @default(false)
+  bookings  Booking[]
+}
+
+model Booking {
+  id         String   @id @default(cuid())
+  type       String
+  mood       String
+  time       DateTime
+  userId     String?
+  user       User?    @relation(fields: [userId], references: [id])
+  payment    Payment?
+}
+
+model Payment {
+  id         String   @id @default(cuid())
+  amount     Int
+  status     String
+  stripeId   String   @unique // store stripe session/paymentIntent id
+  bookingId  String   @unique
+  booking    Booking  @relation(fields: [bookingId], references: [id])
+}

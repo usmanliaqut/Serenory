@@ -144,6 +144,18 @@ export function BookingDrawer({
     setSubmitting(true);
 
     try {
+      // Combine selectedDate + selectedTime into a proper Date
+      const [time, modifier] = selectedTime.split(" ");
+      let [hours, minutes] = time.split(":").map(Number);
+
+      if (modifier === "PM" && hours < 12) hours += 12;
+      if (modifier === "AM" && hours === 12) hours = 0;
+
+      const bookingDate = new Date(selectedDate); // YYYY-MM-DD
+      bookingDate.setHours(hours, minutes || 0, 0, 0);
+
+      const bookingTimeISO = bookingDate.toISOString(); // ✅ always valid
+
       const res = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -160,6 +172,12 @@ export function BookingDrawer({
               quantity: 1,
             },
           ],
+          type: session?.title,
+          mood: feeling,
+          time: bookingTimeISO, // ✅ valid ISO date string
+          name,
+          anonymous,
+          email,
         }),
       });
 
