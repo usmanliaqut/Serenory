@@ -22,46 +22,46 @@ export async function POST(request: Request) {
 
     switch (event.type) {
      case "checkout.session.completed": {
-  const session = event.data.object as Stripe.Checkout.Session;
-  const meta = session.metadata;
+      const session = event.data.object as Stripe.Checkout.Session;
+      const meta = session.metadata;
 
-  console.log("✅ Checkout completed:", session.id);
+      console.log("✅ Checkout completed:", session.id);
 
-  try {
-    const user = await prisma.user.upsert({
-      where: { email: meta?.email! },
-      update: {},
-      create: {
-        email: meta?.email!,
-        name: meta?.name || null,
-        anonymous: meta?.anonymous === "true",
-      },
-    });
-
-    // 2. Create booking linked to that user
-    await prisma.booking.create({
-      data: {
-        type: meta?.type!,
-        mood: meta?.mood!,
-        time: new Date(meta?.time!),
-        userId: user.id,
-        payment: {
+      try {
+        const user = await prisma.user.upsert({
+          where: { email: meta?.email! },
+          update: {},
           create: {
-            amount: session.amount_total ?? 0,
-            status: session.payment_status ?? "unknown",
-            stripeId: session.id, // add this to schema to avoid duplicates
+            email: meta?.email!,
+            name: meta?.name || null,
+            anonymous: meta?.anonymous === "true",
           },
-        },
-      },
-    });
+        });
 
-    console.log("💾 Booking + Payment saved in DB");
-  } catch (dbErr) {
-    console.error("❌ DB insert error:", dbErr);
-  }
+        // 2. Create booking linked to that user
+        await prisma.booking.create({
+          data: {
+            type: meta?.type!,
+            mood: meta?.mood!,
+            time: new Date(meta?.time!),
+            userId: user.id,
+            payment: {
+              create: {
+                amount: session.amount_total ?? 0,
+                status: session.payment_status ?? "unknown",
+                stripeId: session.id, // add this to schema to avoid duplicates
+              },
+            },
+          },
+        });
 
-  break;
-}
+        console.log("💾 Booking + Payment saved in DB");
+      } catch (dbErr) {
+        console.error("❌ DB insert error:", dbErr);
+      }
+
+      break;
+    }
 
 
       case "payment_intent.succeeded": {
@@ -83,9 +83,5 @@ export async function POST(request: Request) {
   }
 }
 
-// Needed so Next.js doesn't parse the body
-export const config = {
-  api: {
-    bodyParser: false,
-  },
-};
+// ⬅️ THIS IS THE FIX 
+export const dynamic = 'force-dynamic';
