@@ -3,7 +3,6 @@
 import { useMemo, useState } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
-  Calendar,
   Clock,
   Mail,
   User,
@@ -18,9 +17,12 @@ import {
   Smile,
   Frown,
   AlertTriangle,
+  CalendarIcon,
 } from "lucide-react";
 
 import { Button } from "../ui/button";
+import { cn } from "@/lib/utils";
+import { format } from "date-fns";
 
 type SessionType = {
   id: number;
@@ -68,6 +70,8 @@ const TIME_SLOTS = [
 
 // lucide-react icons are React components that accept SVG props
 import type { LucideIcon } from "lucide-react";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Calendar } from "../ui/calendar";
 type IconType = LucideIcon;
 
 const FEELINGS: {
@@ -98,7 +102,7 @@ export function BookingDrawer({
   onOpenChange,
   session,
 }: BookingDrawerProps) {
-  const [selectedDate, setSelectedDate] = useState<string>("");
+  const [selectedDate, setSelectedDate] = useState<Date | undefined>();
   const [selectedTime, setSelectedTime] = useState<string>("");
   const [feeling, setFeeling] = useState<FeelingKey | "">("");
   const [name, setName] = useState<string>("");
@@ -108,6 +112,16 @@ export function BookingDrawer({
   const [step, setStep] = useState<1 | 2>(1);
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+
+  const TIME_SLOTS = [
+    "09:00 AM",
+    "10:00 AM",
+    "11:00 AM",
+    "01:00 PM",
+    "02:00 PM",
+    "03:00 PM",
+    "04:00 PM",
+  ];
 
   const days = useMemo(() => getNextDays(14), []);
 
@@ -121,18 +135,28 @@ export function BookingDrawer({
     !!session && !!selectedDate && !!selectedTime && !!feeling && isEmailValid;
   const canProceedDetails = canSubmit;
 
-  const formatDateLong = (dateString: string) => {
-    try {
-      const d = new Date(dateString);
-      return d.toLocaleDateString("en-US", {
-        weekday: "long",
-        year: "numeric",
-        month: "long",
-        day: "numeric",
-      });
-    } catch {
-      return dateString;
-    }
+  // const formatDateLong = (dateString: string) => {
+  //   try {
+  //     const d = new Date(dateString);
+  //     return d.toLocaleDateString("en-US", {
+  //       weekday: "long",
+  //       year: "numeric",
+  //       month: "long",
+  //       day: "numeric",
+  //     });
+  //   } catch {
+  //     return dateString;
+  //   }
+  // };
+
+  const formatDateLongUpdate = (date?: Date) => {
+    if (!date) return "";
+    return date.toLocaleDateString("en-US", {
+      weekday: "long",
+      year: "numeric",
+      month: "long",
+      day: "numeric",
+    });
   };
 
   const stripePromise = loadStripe(
@@ -191,7 +215,7 @@ export function BookingDrawer({
   };
 
   const resetAll = () => {
-    setSelectedDate("");
+    setSelectedDate(new Date());
     setSelectedTime("");
     setFeeling("");
     setName("");
@@ -312,34 +336,19 @@ export function BookingDrawer({
 
               {step === 1 ? (
                 <div className="space-y-8">
-                  {/* Date Selection */}
                   <section>
                     <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
-                      <Calendar className="w-5 h-5 text-emerald-600" />
+                      <CalendarIcon className="w-5 h-5 text-emerald-600" />
                       Choose Your Date
                     </h3>
-                    <div className="grid grid-cols-7 gap-2">
-                      {days.map((d) => {
-                        const active = selectedDate === d.date;
-                        return (
-                          <button
-                            key={d.date}
-                            onClick={() => setSelectedDate(d.date)}
-                            className={`p-3 rounded-xl border-2 transition-all duration-200 ${
-                              active
-                                ? "border-emerald-500 bg-emerald-50 text-emerald-700"
-                                : "border-gray-200 bg-white/80 hover:border-emerald-300 hover:bg-emerald-50/50"
-                            }`}
-                          >
-                            <div className="text-xs text-gray-500 mb-1">
-                              {d.weekday}
-                            </div>
-                            <div className="text-base font-semibold">
-                              {d.dayNum}
-                            </div>
-                          </button>
-                        );
-                      })}
+
+                    <div className="rounded-xl border p-4">
+                      <Calendar
+                        mode="single"
+                        selected={selectedDate}
+                        onSelect={setSelectedDate}
+                        initialFocus
+                      />
                     </div>
                   </section>
 
@@ -501,7 +510,7 @@ export function BookingDrawer({
                       <div className="flex justify-between items-center">
                         <span className="text-gray-600">Date</span>
                         <span className="font-semibold">
-                          {formatDateLong(selectedDate)}
+                          {formatDateLongUpdate(selectedDate)}
                         </span>
                       </div>
                       <div className="flex justify-between items-center">
@@ -632,7 +641,7 @@ export function BookingDrawer({
                   <div className="flex justify-between">
                     <span>Date:</span>
                     <span className="font-medium">
-                      {formatDateLong(selectedDate)}
+                      {formatDateLongUpdate(selectedDate)}
                     </span>
                   </div>
                   <div className="flex justify-between">
