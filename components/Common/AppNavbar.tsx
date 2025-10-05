@@ -57,6 +57,12 @@ const AppNavbar = () => {
               >
                 Contact
               </Link>
+              <Link
+                href="/AnalyticsDashboard"
+                className="text-muted-foreground hover:text-foreground transition-all duration-300 hover:scale-105  underline-offset-4  py-6  cursor-pointer hover:underline"
+              >
+                View Analytics
+              </Link>
               <Button
                 size="sm"
                 onClick={(e) => {
