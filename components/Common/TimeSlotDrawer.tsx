@@ -18,11 +18,12 @@ import {
   Frown,
   AlertTriangle,
   CalendarIcon,
+  ChevronDownIcon,
 } from "lucide-react";
 
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import { format } from "date-fns";
+import { format, setDate } from "date-fns";
 
 type SessionType = {
   id: number;
@@ -72,6 +73,8 @@ const TIME_SLOTS = [
 import type { LucideIcon } from "lucide-react";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import { Calendar } from "../ui/calendar";
+import { Label } from "../ui/label";
+import DatePicker from "../DatePicker";
 type IconType = LucideIcon;
 
 const FEELINGS: {
@@ -112,15 +115,57 @@ export function BookingDrawer({
   const [step, setStep] = useState<1 | 2>(1);
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
+  const [openDate, setOpenDate] = useState(false);
 
   const TIME_SLOTS = [
+    "12:00 AM",
+    "12:30 AM",
+    "01:00 AM",
+    "01:30 AM",
+    "02:00 AM",
+    "02:30 AM",
+    "03:00 AM",
+    "03:30 AM",
+    "04:00 AM",
+    "04:30 AM",
+    "05:00 AM",
+    "05:30 AM",
+    "06:00 AM",
+    "06:30 AM",
+    "07:00 AM",
+    "07:30 AM",
+    "08:00 AM",
+    "08:30 AM",
     "09:00 AM",
+    "09:30 AM",
     "10:00 AM",
+    "10:30 AM",
     "11:00 AM",
+    "11:30 AM",
+    "12:00 PM",
+    "12:30 PM",
     "01:00 PM",
+    "01:30 PM",
     "02:00 PM",
+    "02:30 PM",
     "03:00 PM",
+    "03:30 PM",
     "04:00 PM",
+    "04:30 PM",
+    "05:00 PM",
+    "05:30 PM",
+    "06:00 PM",
+    "06:30 PM",
+    "07:00 PM",
+    "07:30 PM",
+    "08:00 PM",
+    "08:30 PM",
+    "09:00 PM",
+    "09:30 PM",
+    "10:00 PM",
+    "10:30 PM",
+    "11:00 PM",
+    "11:30 PM",
   ];
 
   const days = useMemo(() => getNextDays(14), []);
@@ -342,44 +387,86 @@ export function BookingDrawer({
                       Choose Your Date
                     </h3>
 
-                    <div className="rounded-xl border p-4">
-                      <Calendar
-                        mode="single"
-                        selected={selectedDate}
-                        onSelect={setSelectedDate}
-                        initialFocus
-                      />
-                    </div>
+                    <DatePicker
+                      value={selectedDate}
+                      placeholder="Select Booking Date"
+                      minDate={new Date()}
+                      allowClear
+                      onChange={(date) => {
+                        setSelectedDate(date ?? undefined);
+                        setOpenDate(false);
+                      }}
+                    />
+
+                    {/* <Popover open={openDate} onOpenChange={setOpenDate}>
+                      <PopoverTrigger asChild>
+                        <Button
+                          variant={"outline"}
+                          className={cn(
+                            "w-[280px] justify-start text-left font-normal",
+                            !selectedDate && "text-muted-foreground"
+                          )}
+                        >
+                          <CalendarIcon className="mr-2 h-4 w-4" />
+                          {selectedDate ? (
+                            format(selectedDate, "PPP")
+                          ) : (
+                            <span>Pick a date</span>
+                          )}
+                        </Button>
+                      </PopoverTrigger>
+                      <PopoverContent className="w-auto p-0 z-[2000]">
+                        <Calendar
+                          mode="single"
+                          selected={selectedDate}
+                          onSelect={(date) => {
+                            setSelectedDate(date);
+                            setOpenDate(false); // This correctly closes the popover on selection
+                          }}
+                          disabled={(date) =>
+                            date <
+                            new Date(
+                              new Date().setDate(new Date().getDate() - 1)
+                            )
+                          }
+                          initialFocus
+                        />
+                      </PopoverContent>
+                    </Popover> */}
                   </section>
 
                   {/* Time Selection */}
                   <section
-                    className={
+                    className={`${
                       !selectedDate ? "opacity-50 pointer-events-none" : ""
-                    }
+                    }`}
                   >
                     <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                       <Clock className="w-5 h-5 text-blue-600" />
                       Select Your Time
                     </h3>
-                    <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
-                      {TIME_SLOTS.map((t) => {
-                        const active = selectedTime === t;
-                        return (
-                          <button
-                            key={t}
-                            onClick={() => setSelectedTime(t)}
-                            className={`p-3 rounded-xl border-2 transition-all duration-200 ${
-                              active
-                                ? "border-blue-500 bg-blue-50 text-blue-700"
-                                : "border-gray-200 bg-white/80 hover:border-blue-300 hover:bg-blue-50/50"
-                            }`}
-                            disabled={!selectedDate}
-                          >
-                            <div className="font-medium">{t}</div>
-                          </button>
-                        );
-                      })}
+
+                    {/* Scrollable grid container */}
+                    <div className="max-h-64 overflow-y-auto pr-2 scrollbar-thin scrollbar-thumb-gray-300 scrollbar-track-transparent hover:scrollbar-thumb-gray-400">
+                      <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                        {TIME_SLOTS.map((t) => {
+                          const active = selectedTime === t;
+                          return (
+                            <button
+                              key={t}
+                              onClick={() => setSelectedTime(t)}
+                              className={`p-3 rounded-xl border-2 transition-all duration-200 ${
+                                active
+                                  ? "border-blue-500 bg-blue-50 text-blue-700"
+                                  : "border-gray-200 bg-white/80 hover:border-blue-300 hover:bg-blue-50/50"
+                              }`}
+                              disabled={!selectedDate}
+                            >
+                              <div className="font-medium">{t}</div>
+                            </button>
+                          );
+                        })}
+                      </div>
                     </div>
                   </section>
 
