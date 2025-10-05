@@ -2,6 +2,8 @@ import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { PrismaClient } from "@prisma/client";
+import { Resend } from "resend";
+
 
 const prisma = new PrismaClient();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -10,6 +12,7 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
 export async function POST(request: Request) {
+  const resend = new Resend(process.env.RESEND_API_KEY);
   const body = await request.text();
   const sig = headers().get("stripe-signature");
 
@@ -54,8 +57,25 @@ export async function POST(request: Request) {
             },
           },
         });
+      if (session.metadata?.email) {
+          await resend.emails.send({
+            from: 'onboarding@resend.dev',
+            to: session.metadata.email,
+            subject: "Your booking is confirmed ✅",
+            html: `
+              <h1>Thank you for your booking!</h1>
+              <p>We’ve confirmed your session.</p>
+              <p><strong>Type:</strong> ${session.metadata.type}</p>
+              <p><strong>Mood:</strong> ${session.metadata.mood}</p>
+              <p><strong>Time:</strong> ${session.metadata.time}</p>
+            `,
+          });
+          console.log("📧 Email sent to:", session.metadata.email);
+        }
 
         console.log("💾 Booking + Payment saved in DB");
+
+        
       } catch (dbErr) {
         console.error("❌ DB insert error:", dbErr);
       }
