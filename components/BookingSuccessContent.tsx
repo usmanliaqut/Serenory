@@ -33,9 +33,7 @@ export function BookingSuccessContent({
     <div className="min-h-screen gradient-bg flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
         {/* Success Icon with Animation */}
-        <div
-          className={`flex justify-center mb-8 transition-all duration-700 ${"opacity-0 scale-50"}`}
-        >
+        <div className={`flex justify-center mb-8 transition-all duration-700`}>
           <div className="relative">
             <div className="absolute inset-0 bg-success/20 rounded-full blur-2xl animate-pulse" />
             <CheckCircle2
@@ -47,7 +45,7 @@ export function BookingSuccessContent({
 
         {/* Main Content Card */}
         <Card
-          className={`border-0 shadow-2xl transition-all duration-700 delay-150 ${"opacity-0 translate-y-8"}`}
+          className={`border-0 shadow-2xl transition-all duration-700 delay-150`}
         >
           <CardContent className="p-8 md:p-12">
             {/* Header */}
@@ -162,7 +160,7 @@ export function BookingSuccessContent({
 
         {/* Footer Link */}
         <div
-          className={`text-center mt-8 transition-all duration-700 delay-300 ${"opacity-0"}`}
+          className={`text-center mt-8 transition-all duration-700 delay-300`}
         >
           <Button
             variant="link"
