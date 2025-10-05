@@ -11,7 +11,7 @@ export async function POST(req: Request) {
   payment_method_types: ["card"],
   mode: "payment",
   line_items: body.items,
-  success_url: `${process.env.NEXT_PUBLIC_URL}/success`,
+  success_url: `${process.env.NEXT_PUBLIC_SITE_URL}/success?session_id={CHECKOUT_SESSION_ID}`,
   cancel_url: `${process.env.NEXT_PUBLIC_URL}/cancel`,
   metadata: {
     type: body.type,
