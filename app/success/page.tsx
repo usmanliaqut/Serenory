@@ -26,7 +26,6 @@ export default async function SuccessPage({
       await stripe.checkout.sessions.retrieve(sessionId);
 
     const metadata = session.metadata;
-    console.log("Stripe Session Metadata:", metadata);
 
     // 3. MAP THE STRIPE DATA TO THE PROPS YOUR COMPONENT EXPECTS
     const bookingDetailsForClient = {
