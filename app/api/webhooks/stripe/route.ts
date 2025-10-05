@@ -60,7 +60,8 @@ export async function POST(request: Request) {
       if (session.metadata?.email) {
           await resend.emails.send({
             from: 'onboarding@resend.dev',
-            to: session.metadata.email,
+            // to: session.metadata.email,
+             to: 'hamdullahdir98@gmail.com',
             subject: "Your booking is confirmed ✅",
             html: `
               <h1>Thank you for your booking!</h1>
