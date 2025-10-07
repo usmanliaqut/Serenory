@@ -1,13 +1,13 @@
 import React from "react";
 import {
   MessageCircle,
-  Phone,
   Mail,
   MapPin,
   Heart,
   Shield,
   Clock,
   Users,
+  MessageSquare,
 } from "lucide-react";
 
 const Footer = () => {
@@ -61,10 +61,10 @@ const Footer = () => {
             <div className="mb-8">
               <div className="flex items-center space-x-4 mb-4">
                 <div className="relative">
-                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 via-teal-500 to-blue-400 rounded-2xl flex items-center justify-center relative overflow-hidden">
+                  <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 via-teal-500  rounded-2xl flex items-center justify-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-emerald-300/30 via-transparent to-blue-300/30 rounded-2xl"></div>
                     <MessageCircle className="w-7 h-7 text-white relative z-10" />
-                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-teal-300 to-blue-300 rounded-full opacity-60"></div>
+                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-teal-300 rounded-full opacity-60"></div>
                   </div>
                 </div>
                 <div>
@@ -111,18 +111,40 @@ const Footer = () => {
                 <MessageCircle className="w-5 h-5 text-teal-400" />
                 Get in Touch
               </h4>
-              <div className="space-y-3">
+
+              <div className="space-y-3 text-slate-200">
+                {/* General inquiries & booking confirmations */}
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-teal-500/20 rounded-lg flex items-center justify-center">
                     <Mail className="w-4 h-4 text-teal-400" />
                   </div>
-                  <span className="text-slate-200">hello@serenory.co</span>
+                  <div className="flex flex-col">
+                    <span className="font-medium">hello@serenory.co</span>
+                    <span className="text-sm text-slate-400">
+                      For general inquiries & booking confirmations
+                    </span>
+                  </div>
                 </div>
+
+                {/* After-session or technical support */}
+                <div className=" items-center gap-3 sm:flex hidden">
+                  <div className="w-8 h-8 bg-cyan-500/20 rounded-lg flex items-center justify-center">
+                    <MessageSquare className="w-4 h-4 text-cyan-400" />
+                  </div>
+                  <div className="flex flex-col">
+                    <span className="font-medium">support@serenory.co</span>
+                    <span className="text-sm text-slate-400">
+                      For after-session or technical support
+                    </span>
+                  </div>
+                </div>
+
+                {/* Accessible online */}
                 <div className="flex items-center gap-3">
                   <div className="w-8 h-8 bg-indigo-500/20 rounded-lg flex items-center justify-center">
                     <MapPin className="w-4 h-4 text-indigo-400" />
                   </div>
-                  <span className="text-slate-200">Accessible online</span>
+                  <span>Accessible online</span>
                 </div>
               </div>
             </div>
@@ -130,38 +152,67 @@ const Footer = () => {
 
           {/* Services */}
           <div className="bg-white/5 backdrop-blur-sm rounded-2xl p-6 border border-white/10 shadow-lg hover:bg-white/10 transition-all duration-300">
-            <h3 className="font-bold text-white mb-6 flex items-center gap-2">
+            <h3 className="font-bold text-white mb-3 flex items-center gap-2">
               <div className="w-6 h-6 bg-gradient-to-r from-teal-500 to-teal-600 rounded-lg flex items-center justify-center">
                 <Heart className="w-3 h-3 text-white" />
               </div>
-              Our Services
+              Our Quiet Promise
             </h3>
+
+            <p className="text-slate-300 mb-4">
+              Every conversation at{" "}
+              <span className="text-white font-medium">Serenory</span> rests on
+              five gentle principles:
+            </p>
+
             <ul className="space-y-3 text-slate-300">
-              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200">
-                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
-                Single Listening Sessions
+              <li className="flex items-start gap-2 hover:text-white transition-colors duration-200">
+                <div className="w-1.5 h-1.5 mt-2 bg-teal-400 rounded-full"></div>
+                <span>
+                  <strong className="text-white">Presence</strong> – You'll
+                  always find a calm, caring listener.
+                </span>
               </li>
-              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200">
-                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
-                Wellness Packages
+              <li className="flex items-start gap-2 hover:text-white transition-colors duration-200">
+                <div className="w-1.5 h-1.5 mt-2 bg-teal-400 rounded-full"></div>
+                <span>
+                  <strong className="text-white">Privacy</strong> – What's
+                  shared here, stays here.
+                </span>
               </li>
-              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200">
-                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
-                Extended Sessions
+              <li className="flex items-start gap-2 hover:text-white transition-colors duration-200">
+                <div className="w-1.5 h-1.5 mt-2 bg-teal-400 rounded-full"></div>
+                <span>
+                  <strong className="text-white">Simplicity</strong> – Book when
+                  you need to — no waiting, no forms.
+                </span>
               </li>
-              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200">
-                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
-                Flexible Scheduling
+              <li className="flex items-start gap-2 hover:text-white transition-colors duration-200">
+                <div className="w-1.5 h-1.5 mt-2 bg-teal-400 rounded-full"></div>
+                <span>
+                  <strong className="text-white">Warmth</strong> – We listen
+                  without judgment or advice.
+                </span>
               </li>
-              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200">
-                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
-                Anonymous Support
-              </li>
-              <li className="flex items-center gap-2 hover:text-white transition-colors duration-200">
-                <div className="w-1.5 h-1.5 bg-teal-400 rounded-full"></div>
-                Secure Platform
+              <li className="flex items-start gap-2 hover:text-white transition-colors duration-200">
+                <div className="w-1.5 h-1.5 mt-2 bg-teal-400 rounded-full"></div>
+                <span>
+                  <strong className="text-white">Trust</strong> – Your comfort
+                  and safety come first.
+                </span>
               </li>
             </ul>
+
+            {/* Soft divider */}
+            <div className="my-6 h-px bg-white/10"></div>
+
+            <p className="text-sm text-slate-400 italic">
+              Wellness Packages –{" "}
+              <span className="text-slate-500">Coming Soon</span>
+              <br />
+              For those who'd like gentle, ongoing conversations and reflective
+              follow-ups.
+            </p>
           </div>
 
           {/* Support */}

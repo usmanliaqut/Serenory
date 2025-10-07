@@ -15,10 +15,10 @@ const AppNavbar = () => {
             {/* Logo + Tagline */}
             <div className="flex items-center space-x-4">
               <div className="relative">
-                <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 via-teal-500 to-blue-400 rounded-2xl flex items-center justify-center relative overflow-hidden">
+                <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 via-teal-400 rounded-2xl flex items-center justify-center relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-300/30 via-transparent to-blue-300/30 rounded-2xl"></div>
                   <MessageCircle className="w-7 h-7 text-white relative z-10" />
-                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-teal-300 to-blue-300 rounded-full opacity-60"></div>
+                  <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-teal-300 rounded-full opacity-60"></div>
                 </div>
               </div>
               <div>
