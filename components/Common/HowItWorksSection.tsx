@@ -1,5 +1,12 @@
 import React from "react";
-import { Clock, MessageCircle, Heart, ArrowRight } from "lucide-react";
+import {
+  Clock,
+  MessageCircle,
+  Heart,
+  ArrowRight,
+  Calendar,
+  Flower2,
+} from "lucide-react";
 import { Button } from "../ui/button";
 
 const HowItWorksSection: React.FC = () => {
@@ -8,14 +15,18 @@ const HowItWorksSection: React.FC = () => {
       number: "01",
       title: "Choose Your Moment",
       description: "Pick a time that feels right. No long sign-ups.",
-      icon: <Clock className="w-8 h-8" />,
+      icon: (
+        <Calendar className="w-8 h-8 text-purple-600/80" strokeWidth={1.5} />
+      ),
       color: "from-emerald-500 to-teal-600",
     },
     {
       number: "02",
       title: "Be Present",
       description: "Talk about anything with a Serenory Companion.",
-      icon: <MessageCircle className="w-8 h-8" />,
+      icon: (
+        <Flower2 className="w-8 h-8 text-emerald-600/80" strokeWidth={1.5} />
+      ),
       color: "from-blue-500 to-indigo-600",
     },
     {
@@ -100,15 +111,39 @@ const HowItWorksSection: React.FC = () => {
                 {/* Step Card */}
                 <div className="relative bg-white/80 backdrop-blur-sm rounded-3xl p-8 shadow-xl border border-white/50 hover:shadow-2xl transition-all duration-500 hover:scale-105 group-hover:bg-white/90">
                   {/* Step Number */}
-                  <div className="absolute -top-4 -left-4 w-12 h-12 bg-gradient-to-br from-gray-800 to-gray-900 rounded-2xl flex items-center justify-center shadow-lg">
-                    <span className="text-white font-bold text-lg">
+
+                  <div
+                    className={`absolute -top-4 -left-4 w-12 h-12 rounded-2xl flex items-center justify-center shadow-lg
+                      ${
+                        step.number === "01"
+                          ? "bg-gradient-to-br from-purple-200 to-pink-200"
+                          : step.number === "02"
+                          ? "bg-gradient-to-br from-teal-200 to-emerald-200"
+                          : step.number === "03"
+                          ? "bg-gradient-to-br from-rose-200 to-pink-300"
+                          : "bg-gradient-to-br from-indigo-200 to-blue-200"
+                      }
+                    `}
+                  >
+                    <span className="text-purple-700 font-bold text-lg">
                       {step.number}
                     </span>
                   </div>
 
                   {/* Icon */}
+
                   <div
-                    className={`w-16 h-16 bg-gradient-to-br ${step.color} rounded-2xl flex items-center justify-center mb-6 shadow-lg group-hover:scale-110 transition-transform duration-300`}
+                    className="w-16 h-16 rounded-2xl flex items-center justify-center mb-6 shadow-lg transition-transform duration-300"
+                    style={{
+                      backgroundImage:
+                        step.number === "01"
+                          ? "linear-gradient(135deg, #D4F1F4 0%, #E9D5FF 100%)"
+                          : step.number === "02"
+                          ? "linear-gradient(135deg, #D4F1F4 0%, #A7F3D0 100%)"
+                          : step.number === "03"
+                          ? "linear-gradient(135deg, #FECACA 0%, #FBCFE8 100%)"
+                          : "linear-gradient(135deg, #E0E7FF 0%, #C7D2FE 100%)", // default
+                    }}
                   >
                     <div className="text-white">{step.icon}</div>
                   </div>

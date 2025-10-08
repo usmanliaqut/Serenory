@@ -9,27 +9,64 @@ const HeroSection: React.FC = () => {
     <section className="relative min-h-screen flex items-center justify-center overflow-hidden">
       {/* Background layers */}
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/30 to-emerald-50/20" />
-        <div
-          className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-25"
-          style={{ backgroundImage: "url('/serenaimage.jpeg')" }}
-        />
-        <div className="absolute inset-0 bg-white/40 backdrop-blur-[0.5px]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(59,130,246,0.08),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(16,185,129,0.06),transparent_60%)]" />
-        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,69,19,0.04),transparent_70%)]" />
+        {/* Base gradient layer */}
+        <div className="absolute inset-0 bg-gradient-to-br from-slate-50 via-blue-50/30 to-emerald-50/20 z-10" />
+
+        {/* Multiple sliding background images with crossfade effect */}
+        <div className="absolute inset-0 z-0">
+          {/* Calm Sky */}
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0 animate-slideBackground1"
+            style={{
+              backgroundImage:
+                "url('https://images.pexels.com/photos/531756/pexels-photo-531756.jpeg?auto=compress&cs=tinysrgb&w=1920')",
+            }}
+          />
+          {/* Serene Ocean Waves */}
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0 animate-slideBackground2"
+            style={{
+              backgroundImage:
+                "url('https://images.pexels.com/photos/1295138/pexels-photo-1295138.jpeg?auto=compress&cs=tinysrgb&w=1920')",
+            }}
+          />
+          {/* Misty Mountains */}
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0 animate-slideBackground3"
+            style={{
+              backgroundImage:
+                "url('https://images.pexels.com/photos/417173/pexels-photo-417173.jpeg?auto=compress&cs=tinysrgb&w=1920')",
+            }}
+          />
+          {/* Peaceful Clouds */}
+          <div
+            className="absolute inset-0 bg-cover bg-center bg-no-repeat opacity-0 animate-slideBackground4"
+            style={{
+              backgroundImage:
+                "url('https://images.pexels.com/photos/209831/pexels-photo-209831.jpeg?auto=compress&cs=tinysrgb&w=1920')",
+            }}
+          />
+        </div>
+
+        {/* Overlay for better text readability */}
+        <div className="absolute inset-0 bg-white/40 backdrop-blur-[0.5px] z-10" />
+
+        {/* Radial gradient overlays */}
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_20%_30%,rgba(59,130,246,0.08),transparent_60%)] z-10" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_80%_70%,rgba(16,185,129,0.06),transparent_60%)] z-10" />
+        <div className="absolute inset-0 bg-[radial-gradient(circle_at_50%_50%,rgba(139,69,19,0.04),transparent_70%)] z-10" />
 
         {/* Floating elements */}
         <div
-          className="absolute top-1/4 left-1/6 w-40 h-40 bg-blue-200/20 rounded-full blur-2xl animate-pulse"
+          className="absolute top-1/4 left-1/6 w-40 h-40 bg-blue-200/20 rounded-full blur-2xl animate-pulse z-10"
           style={{ animationDuration: "4s" }}
         />
         <div
-          className="absolute bottom-1/3 right-1/5 w-32 h-32 bg-emerald-200/15 rounded-full blur-xl animate-pulse"
+          className="absolute bottom-1/3 right-1/5 w-32 h-32 bg-emerald-200/15 rounded-full blur-xl animate-pulse z-10"
           style={{ animationDuration: "6s", animationDelay: "2s" }}
         />
         <div
-          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-amber-200/10 rounded-full blur-lg animate-pulse"
+          className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-24 h-24 bg-amber-200/10 rounded-full blur-lg animate-pulse z-10"
           style={{ animationDuration: "5s", animationDelay: "1s" }}
         />
       </div>

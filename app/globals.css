@@ -214,3 +214,103 @@
     box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   }
 }
+
+
+@layer utilities {
+  @keyframes slideBackground1 {
+    0% {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+
+    5%,
+    20% {
+      opacity: 0.35;
+      transform: scale(1.05);
+    }
+
+    25%,
+    100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideBackground2 {
+
+    0%,
+    25% {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+
+    30%,
+    45% {
+      opacity: 0.35;
+      transform: scale(1.05);
+    }
+
+    50%,
+    100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideBackground3 {
+
+    0%,
+    50% {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+
+    55%,
+    70% {
+      opacity: 0.35;
+      transform: scale(1.05);
+    }
+
+    75%,
+    100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+
+  @keyframes slideBackground4 {
+
+    0%,
+    75% {
+      opacity: 0;
+      transform: scale(1.1);
+    }
+
+    80%,
+    95% {
+      opacity: 0.35;
+      transform: scale(1.05);
+    }
+
+    100% {
+      opacity: 0;
+      transform: scale(1);
+    }
+  }
+
+  .animate-slideBackground1 {
+    animation: slideBackground1 48s ease-in-out infinite;
+  }
+
+  .animate-slideBackground2 {
+    animation: slideBackground2 48s ease-in-out infinite;
+  }
+
+  .animate-slideBackground3 {
+    animation: slideBackground3 48s ease-in-out infinite;
+  }
+
+  .animate-slideBackground4 {
+    animation: slideBackground4 48s ease-in-out infinite;
+  }
+}
