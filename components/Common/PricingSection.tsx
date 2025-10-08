@@ -244,6 +244,11 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
                 <h3 className="text-xl font-bold text-gray-900 mb-2">
                   {option.title}
                 </h3>
+                <p className="text-sm text-gray-500 mb-2 italic">
+                  {index === 0 && "For light chats and gentle comfort."}
+                  {index === 1 && "For calm reflection and deeper sharing."}
+                  {index === 2 && "For when you need unhurried understanding."}
+                </p>
                 <div className="mb-2">
                   <span className="text-3xl font-bold text-gray-900">
                     ${option.price}

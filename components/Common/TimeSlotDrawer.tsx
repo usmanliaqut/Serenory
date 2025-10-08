@@ -168,6 +168,34 @@ export function BookingDrawer({
     "11:30 PM",
   ];
 
+  const AVAILABLE_SLOTS = [
+    "01:30 AM",
+    "02:00 AM",
+    "02:30 AM",
+    "03:00 AM",
+    "03:30 AM",
+    "04:00 AM",
+    "04:30 AM",
+    "05:00 AM",
+    "05:30 AM",
+    "06:00 AM",
+    "06:30 AM",
+    "07:00 AM",
+    "07:30 AM",
+    "08:00 AM",
+    "08:30 AM",
+    "09:00 AM",
+    "09:30 AM",
+    "10:00 AM",
+    "10:30 AM",
+    "11:00 AM",
+    "11:30 AM",
+    "12:00 PM",
+    "12:30 PM",
+    "01:00 PM",
+    "01:30 PM",
+  ];
+
   const days = useMemo(() => getNextDays(14), []);
 
   const isEmailValid = useMemo(() => {
@@ -451,18 +479,23 @@ export function BookingDrawer({
                       <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                         {TIME_SLOTS.map((t) => {
                           const active = selectedTime === t;
+                          const available = AVAILABLE_SLOTS.includes(t); // 👈 You define this list
+
                           return (
                             <button
                               key={t}
-                              onClick={() => setSelectedTime(t)}
-                              className={`p-3 rounded-xl border-2 transition-all duration-200 ${
-                                active
-                                  ? "border-blue-500 bg-blue-50 text-blue-700"
-                                  : "border-gray-200 bg-white/80 hover:border-blue-300 hover:bg-blue-50/50"
-                              }`}
-                              disabled={!selectedDate}
+                              onClick={() => available && setSelectedTime(t)}
+                              disabled={!available || !selectedDate}
+                              className={`p-3 rounded-xl border-2 transition-all duration-200 text-sm font-medium cursor-pointer
+                                  ${
+                                    !available
+                                      ? "border-gray-200 bg-gray-100 text-gray-400 cursor-not-allowed opacity-60"
+                                      : active
+                                      ? "border-pink-500 bg-pink-50 text-pink-700 shadow-sm"
+                                      : "border-gray-200  bg-white/80 hover:border-mint-300 hover:bg-mint-50/60 text-gray-700"
+                                  }`}
                             >
-                              <div className="font-medium">{t}</div>
+                              {t}
                             </button>
                           );
                         })}
@@ -476,10 +509,14 @@ export function BookingDrawer({
                       !selectedTime ? "opacity-50 pointer-events-none" : ""
                     }
                   >
-                    <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                    <h3 className="text-lg font-semibold text-gray-900 mb-1 flex items-center gap-2">
                       <Heart className="w-5 h-5 text-pink-600" />
                       How are you feeling today?
                     </h3>
+                    <p className="text-xs text-gray-500 italic mb-3">
+                      Your response simply helps us hold space better — it’s
+                      never shared or recorded.
+                    </p>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                       {FEELINGS.map((f) => {
                         const active = feeling === f.key;
@@ -527,7 +564,7 @@ export function BookingDrawer({
                           />
                           <div>
                             <span className="font-medium text-gray-900">
-                              Stay completely anonymous
+                              To prefer to stay anonymous
                             </span>
                             <p className="text-sm text-gray-600">
                               We recommend this for your privacy and comfort
