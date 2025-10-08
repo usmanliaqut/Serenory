@@ -1,3 +1,5 @@
+// schema.prisma
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -7,29 +9,47 @@ generator client {
   provider = "prisma-client-js"
 }
 
+enum BookingStatus {
+  pending
+  in_progress
+  completed
+}
+
 model User {
   id        String    @id @default(cuid())
   email     String    @unique
   name      String?
   anonymous Boolean   @default(false)
   bookings  Booking[]
+
+  createdAt DateTime  @default(now())
+  updatedAt DateTime?  @updatedAt
 }
 
 model Booking {
-  id         String   @id @default(cuid())
-  type       String
-  mood       String
-  time       DateTime
-  userId     String?
-  user       User?    @relation(fields: [userId], references: [id])
-  payment    Payment?
+  id           String          @id @default(cuid())
+  type         String
+  mood         String
+  time         DateTime
+  status       BookingStatus   @default(pending)
+  meetingLink  String?
+
+  userId       String?
+  user         User?           @relation(fields: [userId], references: [id])
+  payment      Payment?
+
+  createdAt    DateTime        @default(now())
+  updatedAt    DateTime?        @updatedAt
 }
 
 model Payment {
   id         String   @id @default(cuid())
   amount     Int
   status     String
-  stripeId   String   @unique // store stripe session/paymentIntent id
+  stripeId   String   @unique
   bookingId  String   @unique
   booking    Booking  @relation(fields: [bookingId], references: [id])
+
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime? @updatedAt
 }

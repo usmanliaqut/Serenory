@@ -26,6 +26,7 @@ import { usePathname } from "next/navigation";
 
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
+  { name: "Bookings", href: "/dashboard/bookings", icon: Calendar },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
   { name: "Clients", href: "/clients", icon: Users },
   { name: "Schedule", href: "/schedule", icon: Calendar },
