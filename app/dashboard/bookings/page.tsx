@@ -10,8 +10,16 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Video } from "lucide-react";
-import Link from "next/link";
+import { CalendarDays, Eye, Mail, RefreshCw, User, Video } from "lucide-react";
+import {
+  Pagination,
+  PaginationContent,
+  PaginationEllipsis,
+  PaginationItem,
+  PaginationLink,
+  PaginationNext,
+  PaginationPrevious,
+} from "@/components/ui/pagination";
 
 export const revalidate = 30; // ISR refresh every 30s
 
@@ -24,117 +32,152 @@ export default async function BookingsPage({
   const { bookings, pagination } = await getBookings({ page, limit: 10 });
 
   return (
-    <div className="p-8 space-y-8">
-      {/* Header */}
-      <div>
-        <h1 className="text-3xl font-semibold tracking-tight">Bookings</h1>
-        <p className="text-muted-foreground">
-          Manage and review all client session bookings
-        </p>
-      </div>
-
-      {/* Bookings Table */}
-      <Card className="shadow-sm border-border/50">
-        <CardHeader>
-          <CardTitle>All Bookings</CardTitle>
-        </CardHeader>
-        <CardContent>
-          {bookings.length === 0 ? (
-            <div className="py-10 text-center text-muted-foreground">
-              No bookings found.
-            </div>
-          ) : (
-            <div className="overflow-x-auto rounded-md border">
-              <Table>
-                <TableHeader>
-                  <TableRow>
-                    <TableHead>Client</TableHead>
-                    <TableHead>Email</TableHead>
-                    <TableHead>Type</TableHead>
-                    <TableHead>Mood</TableHead>
-                    <TableHead>Time</TableHead>
-                    <TableHead>Status</TableHead>
-                    <TableHead className="text-right">Action</TableHead>
-                  </TableRow>
-                </TableHeader>
-                <TableBody>
-                  {bookings.map((b) => (
-                    <TableRow key={b.id}>
-                      <TableCell className="font-medium">
-                        {b.user?.name || "Anonymous"}
-                      </TableCell>
-                      <TableCell className="text-muted-foreground">
-                        {b.user?.email}
-                      </TableCell>
-                      <TableCell>{b.type}</TableCell>
-                      <TableCell>{b.mood}</TableCell>
-                      <TableCell>
-                        {new Date(b.time).toLocaleString("en-US", {
-                          weekday: "short",
-                          month: "short",
-                          day: "numeric",
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
-                      </TableCell>
-                      <TableCell>
-                        <Badge
-                          variant={
-                            b.status === "completed"
-                              ? "default"
-                              : b.status === "in_progress"
-                              ? "secondary"
-                              : "outline"
-                          }
-                        >
-                          {b.status}
-                        </Badge>
-                      </TableCell>
-                      <TableCell className="text-right">
-                        {b.meetingLink && (
-                          <Button
-                            asChild
-                            size="sm"
-                            variant="outline"
-                            className="gap-2"
-                          >
-                            <a
-                              href={b.meetingLink}
-                              target="_blank"
-                              rel="noopener noreferrer"
-                            >
-                              <Video className="w-4 h-4" />
-                              Join
-                            </a>
-                          </Button>
-                        )}
-                      </TableCell>
+    <div className="min-h-screen bg-gradient-to-br from-emerald-50 via-teal-50/30 to-white p-6 md:p-10">
+      <div className=" mx-auto space-y-8">
+        {/* Header */}
+        <header>
+          <h1 className="text-3xl font-bold text-foreground mb-2">
+            All Bookings
+          </h1>
+          <p className="text-muted-foreground">
+            View and manage all session bookings made by clients
+          </p>
+        </header>
+        {/* Booking Table */}
+        <Card className="bg-white border border-border/50 shadow-sm">
+          <CardHeader className="flex flex-row items-center justify-between">
+            <CardTitle className="text-lg font-semibold">
+              Booking Details
+            </CardTitle>
+            <form
+              action="/dashboard/bookings"
+              className="flex items-center gap-2"
+            >
+              <Button variant="outline" size="sm">
+                <RefreshCw className="w-4 h-4 mr-1" /> Refresh
+              </Button>
+            </form>
+          </CardHeader>
+          <CardContent>
+            {bookings.length === 0 ? (
+              <p className="text-center text-muted-foreground py-8">
+                No bookings found.
+              </p>
+            ) : (
+              <div className="overflow-x-auto">
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Client</TableHead>
+                      <TableHead>Type</TableHead> <TableHead>Mood</TableHead>
+                      <TableHead>Date & Time</TableHead>
+                      <TableHead>Status</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </div>
-          )}
-        </CardContent>
-      </Card>
+                  </TableHeader>
+                  <TableBody>
+                    {bookings.map((b: any) => (
+                      <TableRow key={b.id}>
+                        <TableCell className="flex items-center gap-2">
+                          <User className="w-4 h-4 text-muted-foreground" />
+                          {b?.user.name || "Unknown"}
+                        </TableCell>
+                        <TableCell className="flex items-center gap-2">
+                          <Mail className="w-4 h-4 text-muted-foreground" />
+                          {b?.user.email || "-"}
+                        </TableCell>
+                        <TableCell>{b.type || "-"}</TableCell>
+                        <TableCell>{b.mood || "-"}</TableCell>
+                        <TableCell className="flex items-center gap-2">
+                          <CalendarDays className="w-4 h-4 text-muted-foreground" />
+                          {b.time
+                            ? new Date(b.time).toLocaleString("en-US", {
+                                weekday: "short",
+                                month: "short",
+                                day: "numeric",
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                            : "-"}
+                        </TableCell>
+                        <TableCell>
+                          <Badge
+                            className={
+                              b.status === "confirmed"
+                                ? "bg-green-600 text-white"
+                                : b.status === "pending"
+                                ? "bg-yellow-100 text-yellow-800"
+                                : "bg-red-600 text-white"
+                            }
+                          >
+                            {b.status || "pending"}
+                          </Badge>
+                        </TableCell>
+                        <TableCell className="text-right space-x-2">
+                          {b.status === "confirmed" && (
+                            <Button
+                              size="sm"
+                              className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                              asChild
+                            >
+                              <a href={b.meetingLink || "#"} target="_blank">
+                                <Video className="w-4 h-4 mr-1" /> Join
+                              </a>
+                            </Button>
+                          )}
+                          <Button variant="ghost" size="sm">
+                            <Eye className="w-4 h-4 mr-1" /> View
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </div>
+            )}
+          </CardContent>
+        </Card>
 
-      {/* Pagination */}
-      <div className="flex justify-between items-center pt-4 text-sm text-muted-foreground">
-        <span>
-          Page {pagination.page} of {pagination.totalPages}
-        </span>
-        <div className="flex gap-2">
-          {pagination.page > 1 && (
-            <Button asChild size="sm" variant="outline">
-              <Link href={`?page=${pagination.page - 1}`}>Previous</Link>
-            </Button>
-          )}
-          {pagination.page < pagination.totalPages && (
-            <Button asChild size="sm" variant="outline">
-              <Link href={`?page=${pagination.page + 1}`}>Next</Link>
-            </Button>
-          )}
-        </div>
+        {/* Pagination */}
+        {pagination.totalPages > 1 && (
+          <Pagination className="justify-end">
+            <PaginationContent>
+              <PaginationItem>
+                <PaginationPrevious
+                  href={`/dashboard/bookings?page=${Math.max(page - 1, 1)}`}
+                />
+              </PaginationItem>
+
+              {[...Array(pagination.totalPages)].map((_, i) => {
+                const pageNumber = i + 1;
+                if (pageNumber > 3 && pageNumber < pagination.totalPages) {
+                  return null;
+                }
+                return (
+                  <PaginationItem key={pageNumber}>
+                    <PaginationLink
+                      href={`/dashboard/bookings?page=${pageNumber}`}
+                      isActive={pageNumber === page}
+                    >
+                      {pageNumber}
+                    </PaginationLink>
+                  </PaginationItem>
+                );
+              })}
+
+              {pagination.totalPages > 3 && <PaginationEllipsis />}
+
+              <PaginationItem>
+                <PaginationNext
+                  href={`/dashboard/bookings?page=${Math.min(
+                    page + 1,
+                    pagination.totalPages
+                  )}`}
+                />
+              </PaginationItem>
+            </PaginationContent>
+          </Pagination>
+        )}
       </div>
     </div>
   );

@@ -27,10 +27,9 @@ import { usePathname } from "next/navigation";
 const navItems = [
   { name: "Dashboard", href: "/dashboard", icon: LayoutDashboard },
   { name: "Bookings", href: "/dashboard/bookings", icon: Calendar },
+  { name: "Clients", href: "/dashboard/clients", icon: Users },
+  { name: "Schedule", href: "/dashboard/schedule", icon: Calendar },
   { name: "Analytics", href: "/analytics", icon: BarChart3 },
-  { name: "Clients", href: "/clients", icon: Users },
-  { name: "Schedule", href: "/schedule", icon: Calendar },
-  { name: "Settings", href: "/settings", icon: Settings },
 ];
 
 export function AppSidebar() {
