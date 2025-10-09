@@ -426,11 +426,7 @@ export function BookingDrawer({
                     </section>
 
                     {/* Time Selection */}
-                    <section
-                      className={`${
-                        !selectedDate ? "opacity-50 pointer-events-none" : ""
-                      }`}
-                    >
+                    <section>
                       <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                         <Clock className="w-5 h-5 text-blue-600" />
                         Select Your Time
@@ -466,11 +462,7 @@ export function BookingDrawer({
                     </section>
 
                     {/* Feeling Selection */}
-                    <section
-                      className={
-                        !selectedTime ? "opacity-50 pointer-events-none" : ""
-                      }
-                    >
+                    <section>
                       <h3 className="text-lg font-semibold text-gray-900 mb-1 flex items-center gap-2">
                         <Heart className="w-5 h-5 text-pink-600" />
                         How are you feeling today?
@@ -505,11 +497,7 @@ export function BookingDrawer({
                     </section>
 
                     {/* Contact Details */}
-                    <section
-                      className={
-                        !feeling ? "opacity-50 pointer-events-none" : ""
-                      }
-                    >
+                    <section>
                       <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                         <User className="w-5 h-5 text-purple-600" />
                         Your Details
