@@ -7,6 +7,7 @@ import PricingSection from "./PricingSection";
 import { BookingDrawer } from "./TimeSlotDrawer";
 import TestimonialsSection from "./TestimonialsSection";
 import CTASection from "./CTASection";
+import PremiumSessions from "./PremiumSessions";
 
 type SessionType = {
   id: number;
@@ -53,6 +54,9 @@ const BookingPlace = () => {
       <TestimonialsSection />
 
       <PricingSection onBookSession={(session) => handleBookSession(session)} />
+      <PremiumSessions
+        onBookSession={(session) => handleBookSession(session)}
+      />
 
       {/* CTA Section */}
       <CTASection onBookSession={handleBookSession} />

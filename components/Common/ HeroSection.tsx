@@ -77,13 +77,13 @@ const HeroSection: React.FC = () => {
           {/* Brand Badge */}
           <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 my-8 md:mb-8 md:mt-6 shadow-lg border border-white/50">
             <Heart className="w-5 h-5 text-emerald-600" />
-            <span className="text-sm font-semibold text-gray-700 tracking-wide">
-              SERENORY
+            <span className="text-md font-semibold text-gray-700 tracking-wide">
+              Quiet Presence
             </span>
-            <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
+            {/* <div className="w-1 h-1 bg-gray-400 rounded-full"></div>
             <span className="text-xs text-gray-600 uppercase tracking-wider">
-              Emotional Wellness
-            </span>
+              Presence
+            </span> */}
           </div>
 
           {/* Main Headline (Hero tagline) */}
@@ -99,7 +99,8 @@ const HeroSection: React.FC = () => {
 
           {/* Subline */}
           <p className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed font-medium">
-            No forms. No waiting. Just the simple power of being heard.
+            A quiet, gentle place to share what's on your mind - held with calm,
+            human presence.
           </p>
 
           {/* CTA Buttons */}

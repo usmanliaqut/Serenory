@@ -46,7 +46,6 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
         "Confidential & anonymous",
         "Voice, video, or text",
         "Non-judgmental listening",
-        "Optional Echo Note reflection (Coming soon...)",
       ],
     },
     {
@@ -55,7 +54,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
       price: 20,
       duration: "60 minutes",
       description:
-        "A comprehensive space for meaningful conversation and reflection",
+        "Quite emotional presence — room to settle, speak freely and feel truly heard",
       icon: <Clock className="w-6 h-6" />,
       features: [
         "60-minute session",
@@ -146,13 +145,12 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-white/50">
               <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
                 <Shield className="w-6 h-6 text-emerald-600" />
-                Our Promise to You
+                Our Quiet Promise
               </h3>
               <p className="text-gray-600 leading-relaxed mb-6">
-                We believe everyone deserves to be heard. Session Options
-                reflects our commitment to making emotional wellness accessible
-                while ensuring our companions can provide the quality presence
-                you deserve.
+                A space held with calm intention - where your presence is met
+                with ease, respect, and steady attention. With every Serenory
+                moment, you receive:
               </p>
 
               <div className="space-y-3">
@@ -161,7 +159,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
                     <Check className="w-4 h-4 text-emerald-600" />
                   </div>
                   <span className="text-gray-700 font-medium">
-                    No hidden fees or surprise charges
+                    A composed, attentive Companion who stays present with you.
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
@@ -169,7 +167,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
                     <Check className="w-4 h-4 text-blue-600" />
                   </div>
                   <span className="text-gray-700 font-medium">
-                    5-minute reconnection grace period
+                    Quiet confidentiality, where your words remain gently held.
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
@@ -177,7 +175,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
                     <Check className="w-4 h-4 text-amber-600" />
                   </div>
                   <span className="text-gray-700 font-medium">
-                    Complete anonymity guaranteed
+                    Effortless simplicity - clear pricing, no hidden steps.
                   </span>
                 </div>
                 <div className="flex items-center gap-3">
@@ -185,7 +183,35 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
                     <Check className="w-4 h-4 text-purple-600" />
                   </div>
                   <span className="text-gray-700 font-medium">
-                    Flexible hours, same-day availability
+                    Reconnection grace, so a brief pause never interrupts your
+                    time.
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <span className="text-gray-700 font-medium">
+                    Anonymity by choice, letting you share only what feels
+                    comfortable.
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <span className="text-gray-700 font-medium">
+                    Flexible availability, offering moments of calm whenever you
+                    need them.
+                  </span>
+                </div>
+                <div className="flex items-center gap-3">
+                  <div className="w-6 h-6 bg-purple-100 rounded-full flex items-center justify-center">
+                    <Check className="w-4 h-4 text-purple-600" />
+                  </div>
+                  <span className="text-gray-700 font-medium">
+                    A softly lit space for your thoughts - unhurried,
+                    respectful, and thoughtfully cared for.
                   </span>
                 </div>
               </div>
@@ -199,12 +225,13 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
                   <Heart className="w-8 h-8 text-white" />
                 </div>
                 <h4 className="text-xl font-bold text-gray-900 mb-2">
-                  Reconnection Guarantee
+                  RECONNECTION GRACE
                 </h4>
                 <p className="text-gray-600 leading-relaxed">
-                  If your session drops due to technical issues, you'll have a
-                  5-minute grace period to reconnect without additional charges.
-                  We never want you to feel cut off when you need support most.
+                  If your session pauses or disconnects, you'll have a gentle
+                  window to reconnect - with no extra steps and no extra cost.
+                  Your conversation should feel steady and unbroken, held with
+                  the same calm presence you came for.
                 </p>
               </div>
             </div>
@@ -246,7 +273,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
                 </h3>
                 <p className="text-sm text-gray-500 mb-2 italic">
                   {index === 0 && "For light chats and gentle comfort."}
-                  {index === 1 && "For calm reflection and deeper sharing."}
+                  {index === 1 && "For a calm reflection and deeper sharing."}
                   {index === 2 && "For when you need unhurried understanding."}
                 </p>
                 <div className="mb-2">

@@ -78,10 +78,10 @@ const Footer = () => {
               </div>
 
               <p className="text-slate-200 mb-6 max-w-md leading-relaxed">
-                A gentle space for your thoughts. We provide confidential
-                listening sessions where you can share freely and feel truly
-                heard. Not therapy or medical care—just the simple power of
-                human connection.
+                A gentle place to share what's on your mind - held with calm
+                presence and complete confidentiality. We offer a simple human
+                connection where you can speak freely and feel heard. We're here
+                for a thoughtful, comforting conversation.
               </p>
 
               {/* Trust Indicators */}
@@ -260,14 +260,12 @@ const Footer = () => {
             <Shield className="w-6 h-6 text-amber-400 mt-1 flex-shrink-0" />
             <div>
               <h4 className="font-semibold text-amber-200 mb-2">
-                Important Notice
+                IMPORTANT NOTICE
               </h4>
               <p className="text-amber-100 text-sm leading-relaxed">
-                Serenory provides emotional wellness support through listening
-                sessions. We are not a therapy, counseling, medical, or
-                emergency service. If you're experiencing a mental health
-                crisis, please contact your local emergency services or a
-                qualified mental health professional.
+                Serenory offers calm, confidential listening sessions. We don't
+                provide therapy or crisis support. If you ever need urgent
+                assistance, please contact your local emergency service.
               </p>
             </div>
           </div>
