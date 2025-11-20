@@ -207,11 +207,11 @@ const Footer = () => {
             <div className="my-6 h-px bg-white/10"></div>
 
             <p className="text-sm text-slate-400 italic">
-              Wellness Packages –{" "}
+              Extended presence –{" "}
               <span className="text-slate-500">Coming Soon</span>
-              <br />
-              For those who'd like gentle, ongoing conversations and reflective
-              follow-ups.
+              <br />- Gentle bundles for unhurried, continued conversations held
+              with calm, steady presence and room to return whenever you need
+              it.
             </p>
           </div>
 

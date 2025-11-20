@@ -90,7 +90,7 @@ const HowItWorksSection: React.FC = () => {
           </h2>
 
           <p className="text-xl text-gray-600 max-w-2xl mx-auto leading-relaxed">
-            Your journey to emotional relief starts with three gentle steps.
+            Your gentle moment of being heard begins with three gentle steps.
           </p>
         </div>
 

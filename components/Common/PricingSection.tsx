@@ -134,8 +134,8 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
           </h2>
 
           <p className="text-xl md:text-2xl text-gray-600 max-w-3xl mx-auto leading-relaxed font-light">
-            Transparent pricing for emotional wellness. No hidden fees, just
-            honest support when you need it most.
+            Gentle, transparent pricing for the time and presence you need - no
+            hidden fees, just a quiet space when you need it most
           </p>
         </div>
 
