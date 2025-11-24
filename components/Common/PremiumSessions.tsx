@@ -96,12 +96,12 @@ const PremiumSessions: React.FC<PricingSectionProps> = ({ onBookSession }) => {
 
       <div className="container mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
         <div className="text-center mb-16">
-          <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 mb-6 shadow-lg border border-white/50">
+          {/* <div className="inline-flex items-center gap-2 bg-white/80 backdrop-blur-sm rounded-full px-6 py-3 mb-6 shadow-lg border border-white/50">
             <Sparkles className="w-5 h-5 text-emerald-600" />
             <span className="text-sm font-semibold text-gray-700 tracking-wide">
               EXTENDED PRESENCE TIER
             </span>
-          </div>
+          </div> */}
 
           <h2 className="text-4xl md:text-5xl lg:text-6xl font-bold text-gray-900 mb-6 leading-tight">
             Premium

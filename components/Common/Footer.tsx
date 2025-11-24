@@ -160,8 +160,9 @@ const Footer = () => {
             </h3>
 
             <p className="text-slate-300 mb-4">
-              Every conversation at{" "}
-              <span className="text-white font-medium">Serenory</span> rests on
+              A space held with calm intention - where your presence is met with
+              ease, respect, and steady attention. Every conversation at
+              <span className="text-white font-medium"> Serenory</span> rests on
               five gentle principles:
             </p>
 
@@ -169,36 +170,41 @@ const Footer = () => {
               <li className="flex items-start gap-2 hover:text-white transition-colors duration-200">
                 <div className="w-1.5 h-1.5 mt-2 bg-teal-400 rounded-full"></div>
                 <span>
-                  <strong className="text-white">Presence</strong> – You'll
-                  always find a calm, caring listener.
+                  <strong className="text-white">Presence</strong> – You're met
+                  by a composed, caring companion who stays with you, unhurried
+                  and attentive.
                 </span>
               </li>
               <li className="flex items-start gap-2 hover:text-white transition-colors duration-200">
                 <div className="w-1.5 h-1.5 mt-2 bg-teal-400 rounded-full"></div>
                 <span>
-                  <strong className="text-white">Privacy</strong> – What's
-                  shared here, stays here.
+                  <strong className="text-white">Privacy</strong> – Your words
+                  remain gently held. What you share stays here, with anonymity
+                  whenever you want it.
                 </span>
               </li>
               <li className="flex items-start gap-2 hover:text-white transition-colors duration-200">
                 <div className="w-1.5 h-1.5 mt-2 bg-teal-400 rounded-full"></div>
                 <span>
-                  <strong className="text-white">Simplicity</strong> – Book when
-                  you need to — no waiting, no forms.
+                  <strong className="text-white">Simplicity</strong> – Clear
+                  pricing. No forms. No hidden steps. Just a straightforward way
+                  to enter when you need support.
                 </span>
               </li>
               <li className="flex items-start gap-2 hover:text-white transition-colors duration-200">
                 <div className="w-1.5 h-1.5 mt-2 bg-teal-400 rounded-full"></div>
                 <span>
-                  <strong className="text-white">Warmth</strong> – We listen
-                  without judgment or advice.
+                  <strong className="text-white">Warmth</strong> – A softly lit
+                  space for your thoughts - listened to with respect, without
+                  judgment, advice, or pressure.
                 </span>
               </li>
               <li className="flex items-start gap-2 hover:text-white transition-colors duration-200">
                 <div className="w-1.5 h-1.5 mt-2 bg-teal-400 rounded-full"></div>
                 <span>
-                  <strong className="text-white">Trust</strong> – Your comfort
-                  and safety come first.
+                  <strong className="text-white">Trust</strong> – You're
+                  welcomed back with grace. A brief pause never interrupts your
+                  time, and your comfort always comes first.
                 </span>
               </li>
             </ul>
