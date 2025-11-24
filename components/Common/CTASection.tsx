@@ -89,8 +89,7 @@ const CTASection: React.FC<CTASectionProps> = ({ onBookSession }) => {
 
         {/* Subline */}
         <p className="text-xl md:text-2xl text-white/90 mb-12 max-w-3xl mx-auto leading-relaxed font-light">
-          Take the gentle step toward feeling lighter. Your story matters, and
-          we're here to listen.
+          Take the gentle step toward feeling lighter. we're here to listen.
         </p>
 
         {/* Trust Indicators */}

@@ -54,7 +54,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
       price: 20,
       duration: "60 minutes",
       description:
-        "Quite emotional presence — room to settle, speak freely and feel truly heard",
+        "Quite presence- room to settle, speak freely and feel truly heard",
       icon: <Clock className="w-6 h-6" />,
       features: [
         "60-minute session",
@@ -140,8 +140,8 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
         </div>
 
         {/* Pricing Info Section */}
-        <div className="mb-16 grid lg:grid-cols-2 gap-12 items-center">
-          <div className="space-y-6">
+        <div className="mb-16 grid lg:grid-cols-1 gap-12 items-center max-w-3xl mx-auto">
+          {/* <div className="space-y-6">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-white/50">
               <h3 className="text-2xl font-bold text-gray-900 mb-4 flex items-center gap-3">
                 <Shield className="w-6 h-6 text-emerald-600" />
@@ -216,7 +216,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
                 </div>
               </div>
             </div>
-          </div>
+          </div> */}
 
           <div className="relative">
             <div className="bg-white/80 backdrop-blur-sm rounded-2xl p-8 shadow-xl border border-white/50">
