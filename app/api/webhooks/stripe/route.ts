@@ -47,7 +47,7 @@ export async function POST(req: NextRequest) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
         const meta = session.metadata;
-
+         console.log("meta",meta)
         console.log("🎯 checkout.session.completed received");
 
         if (!meta?.email || !meta?.type || !meta?.time) {
@@ -96,7 +96,7 @@ export async function POST(req: NextRequest) {
           const html = generateBookingConfirmedEmailHtml({
             siteName: "Serenory",
             sessionMetadata: meta,
-            useLink: `${BASE_URL}/booking/${booking.id}`,
+            useLink: `${BASE_URL}/meeting/${booking.id}`,
           });
 
       await resend.emails.send({
