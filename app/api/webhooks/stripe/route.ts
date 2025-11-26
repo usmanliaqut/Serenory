@@ -1,9 +1,12 @@
+import { NextRequest, NextResponse } from "next/server";
 import { headers } from "next/headers";
-import { NextResponse } from "next/server";
 import Stripe from "stripe";
 import { PrismaClient } from "@prisma/client";
 import { Resend } from "resend";
 import generateBookingConfirmedEmailHtml from "./bookingConfirmedEmail";
+
+export const runtime = "nodejs"; // Required for raw body
+export const dynamic = "force-dynamic"; // Prevent static caching
 
 const prisma = new PrismaClient();
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
@@ -12,36 +15,48 @@ const stripe = new Stripe(process.env.STRIPE_SECRET_KEY!, {
 const resend = new Resend(process.env.RESEND_API_KEY);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET!;
 
-// Ensure correct public domain fallback
 const BASE_URL =
   (process.env.NEXT_PUBLIC_URL ?? "https://serenory.app").replace(/\/+$/, "");
 
-export async function POST(request: Request) {
-  const body = await request.text();
-  const sig = headers().get("stripe-signature");
+export async function POST(req: NextRequest) {
+  const signature = headers().get("stripe-signature");
+  const rawBody = await req.text(); 
 
-  if (!sig) {
-    return new NextResponse("Missing Stripe signature", { status: 400 });
+  if (!signature) {
+    console.error("❌ Missing stripe-signature header.");
+    return new NextResponse("Missing signature", { status: 400 });
+  }
+
+  let event: Stripe.Event;
+
+  try {
+    event = stripe.webhooks.constructEvent(
+      rawBody,
+      signature,
+      endpointSecret
+    );
+  } catch (err: any) {
+    console.error("❌ Invalid webhook signature:", err.message);
+    return new NextResponse(`Webhook signature error: ${err.message}`, {
+      status: 400,
+    });
   }
 
   try {
-    const event = stripe.webhooks.constructEvent(body, sig, endpointSecret);
-
     switch (event.type) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
         const meta = session.metadata;
 
+        console.log("🎯 checkout.session.completed received");
+
         if (!meta?.email || !meta?.type || !meta?.time) {
-          console.error("❌ Missing metadata:", meta);
+          console.error("❌ Missing metadata →", meta);
           break;
         }
 
-        const meetingLink = `${BASE_URL}/meeting/${session.id}`;
-
         let booking: any = null;
 
-        // Save booking + user + payment
         try {
           const user = await prisma.user.upsert({
             where: { email: meta.email },
@@ -53,64 +68,51 @@ export async function POST(request: Request) {
             },
           });
 
-          const bookingData:any = {
-            type: meta.type,
-            mood: meta.mood || null,
-            time: new Date(meta.time),
-            userId: user.id,
-            meetingLink,
-            payment: {
-              create: {
-                amount: session.amount_total ?? 0,
-                status: session.payment_status ?? "unknown",
-                stripeId: session.id,
+          booking = await prisma.booking.create({
+            data: {
+              type: meta.type,
+              mood: meta?.mood ?? null,
+              time: new Date(meta.time),
+              userId: user.id,
+              meetingLink: `${BASE_URL}/meeting/${session.id}`,
+              payment: {
+                create: {
+                  amount: session.amount_total ?? 0,
+                  status: session.payment_status ?? "unknown",
+                  stripeId: session.id,
+                },
               },
             },
-          };
+          });
 
-          booking = await prisma.booking.create({ data: bookingData });
-          console.log("📝 Booking saved →", booking.id);
-
+          console.log("📝 Booking created:", booking.id);
         } catch (dbErr: any) {
-          console.error("❌ Database error:", dbErr);
+          console.error("❌ Database error while creating booking:", dbErr);
         }
 
-        // Send Confirmation Email (does NOT block webhook success)
         try {
-          const useLink = booking
+          const link = booking
             ? `${BASE_URL}/meet/${booking.id}`
-            : meetingLink;
+            : `${BASE_URL}/meeting/${session.id}`;
 
           const html = generateBookingConfirmedEmailHtml({
             siteName: "Serenory",
             sessionMetadata: meta,
-            useLink,
+            useLink: link,
           });
 
           await resend.emails.send({
-            from: "onboarding@resend.dev",
+            from: "Serenory <noreply@serenory.app>",
             to: meta.email,
-            subject: "Your booking is confirmed ✅",
+            subject: "✨ Booking Confirmed — Here’s Your Link!",
             html,
           });
 
-          console.log("📩 Email sent →", meta.email);
-
+          console.log("📩 Confirmation email sent:", meta.email);
         } catch (emailErr: any) {
-          console.error("📧 Email sending failed:", {
-            message: emailErr.message,
-            email: meta.email,
-          });
-
-         
+          console.error("📧 Email sending failed:", emailErr.message);
         }
 
-        break;
-      }
-
-      case "payment_intent.succeeded": {
-        const paymentIntent = event.data.object as Stripe.PaymentIntent;
-        console.log("💰 Payment succeeded:", paymentIntent.id);
         break;
       }
 
@@ -118,12 +120,9 @@ export async function POST(request: Request) {
         console.log("⚠️ Ignored Stripe event:", event.type);
     }
 
-    return NextResponse.json({ received: true }, { status: 200 });
-
+    return NextResponse.json({ received: true });
   } catch (err: any) {
-    console.error("❌ Webhook signature validation error:", err.message);
-    return new NextResponse(`Webhook Error: ${err.message}`, { status: 400 });
+    console.error("❌ Webhook handler error:", err);
+    return new NextResponse("Webhook processing failed", { status: 500 });
   }
 }
-
-export const dynamic = "force-dynamic";
