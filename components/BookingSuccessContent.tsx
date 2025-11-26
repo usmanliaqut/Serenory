@@ -11,14 +11,15 @@ import {
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
-import { useState, useEffect } from "react";
+import { Line } from "recharts";
+import Link from "next/link";
 
 interface BookingDetails {
   expertName: string;
   expertTitle: string;
-  date: string;
-  time: string;
-  duration: string;
+  date: string; // e.g. "Feb 14, 2025"
+  time: string; // e.g. "2:30 PM"
+  duration: string; // e.g. "30 minutes"
   confirmationId: string;
 }
 
@@ -29,10 +30,75 @@ interface BookingSuccessContentProps {
 export function BookingSuccessContent({
   bookingDetails,
 }: BookingSuccessContentProps) {
+  // ---------------------
+  // ADD TO CALENDAR LOGIC
+  // ---------------------
+  const addToCalendar = () => {
+    const startDate = new Date(`${bookingDetails.date} ${bookingDetails.time}`);
+
+    if (isNaN(startDate.getTime())) {
+      console.error(
+        "Invalid date/time:",
+        bookingDetails.date,
+        bookingDetails.time
+      );
+      alert("Invalid date or time");
+      return;
+    }
+
+    const durationMap: Record<string, number> = {
+      "15 minutes": 15,
+      "30 minutes": 30,
+      "60 minutes": 60,
+      "Quiet Continuation": 60,
+      Drift: 60,
+      "$30/ 75 mins": 75,
+      "Deep Presence": 90,
+      "$45/ 90 mins": 90,
+    };
+
+    let durationInMinutes = durationMap[bookingDetails.duration] || 60;
+
+    const endDate = new Date(
+      startDate.getTime() + durationInMinutes * 60 * 1000
+    );
+
+    const formatICS = (date: Date) =>
+      date.toISOString().replace(/-|:|\.\d+/g, "");
+
+    const icsContent = `
+BEGIN:VCALENDAR
+VERSION:2.0
+PRODID:-//YourApp//EN
+BEGIN:VEVENT
+UID:${bookingDetails.confirmationId}@yourapp.com
+DTSTAMP:${formatICS(startDate)}
+DTSTART:${formatICS(startDate)}
+DTEND:${formatICS(endDate)}
+SUMMARY:Session with ${bookingDetails.expertName}
+DESCRIPTION:${bookingDetails.expertTitle}
+LOCATION:Online Meeting
+END:VEVENT
+END:VCALENDAR
+`.trim();
+
+    const blob = new Blob([icsContent], {
+      type: "text/calendar;charset=utf-8",
+    });
+    const url = URL.createObjectURL(blob);
+
+    const link = document.createElement("a");
+    link.href = url;
+    link.download = `booking-${bookingDetails.confirmationId}.ics`;
+    link.click();
+
+    URL.revokeObjectURL(url);
+  };
+
   return (
     <div className="min-h-screen gradient-bg flex items-center justify-center p-4">
       <div className="w-full max-w-2xl">
-        {/* Success Icon with Animation */}
+        {/* Success Icon */}
         <div className={`flex justify-center mb-8 transition-all duration-700`}>
           <div className="relative">
             <div className="absolute inset-0 bg-success/20 rounded-full blur-2xl animate-pulse" />
@@ -43,19 +109,15 @@ export function BookingSuccessContent({
           </div>
         </div>
 
-        {/* Main Content Card */}
-        <Card
-          className={`border-0 shadow-2xl transition-all duration-700 delay-150`}
-        >
+        <Card className={`border-0 shadow-2xl transition-all duration-700`}>
           <CardContent className="p-8 md:p-12">
             {/* Header */}
             <div className="text-center mb-8">
-              <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3 text-balance">
+              <h1 className="text-3xl md:text-4xl font-bold text-foreground mb-3">
                 Booking Confirmed!
               </h1>
-              <p className="text-muted-foreground text-lg text-pretty">
-                Your 1-on-1 conversation has been successfully scheduled. We've
-                sent a confirmation email with all the details.
+              <p className="text-muted-foreground text-lg">
+                Your 1-on-1 conversation has been successfully scheduled.
               </p>
             </div>
 
@@ -67,9 +129,10 @@ export function BookingSuccessContent({
                 <h2 className="text-sm font-semibold text-muted-foreground uppercase tracking-wide mb-4">
                   Session Details
                 </h2>
+
                 <div className="space-y-4">
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
                       <Calendar className="w-5 h-5 text-primary" />
                     </div>
                     <div>
@@ -81,7 +144,7 @@ export function BookingSuccessContent({
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-accent/10 flex items-center justify-center">
                       <Clock className="w-5 h-5 text-accent" />
                     </div>
                     <div>
@@ -95,10 +158,10 @@ export function BookingSuccessContent({
                   </div>
 
                   <div className="flex items-start gap-4">
-                    <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center flex-shrink-0">
+                    <div className="w-10 h-10 rounded-full bg-success/10 flex items-center justify-center">
                       <Video className="w-5 h-5 text-success" />
                     </div>
-                    <div className="flex-1">
+                    <div>
                       <p className="font-medium text-foreground mb-1">
                         {bookingDetails.expertName}
                       </p>
@@ -124,49 +187,30 @@ export function BookingSuccessContent({
 
             {/* Action Buttons */}
             <div className="space-y-3">
-              <Button className="w-full h-12 text-base" size="lg">
+              <Button
+                className="w-full h-12 text-base"
+                size="lg"
+                onClick={addToCalendar}
+              >
                 <Calendar className="w-5 h-5 mr-2" />
                 Add to Calendar
               </Button>
-              <div className="grid grid-cols-2 gap-3">
-                <Button
-                  variant="outline"
-                  className="h-11 bg-transparent"
-                  size="lg"
-                >
-                  <Download className="w-4 h-4 mr-2" />
-                  Download
-                </Button>
-                <Button
-                  variant="outline"
-                  className="h-11 bg-transparent"
-                  size="lg"
-                >
-                  <Mail className="w-4 h-4 mr-2" />
-                  Email Details
-                </Button>
-              </div>
             </div>
 
-            {/* Info Box */}
             <div className="mt-8 p-4 bg-muted/50 rounded-lg border border-border">
-              <p className="text-sm text-muted-foreground text-center text-pretty">
+              <p className="text-sm text-muted-foreground text-center">
                 You'll receive a reminder email 24 hours before your session.
-                The meeting link will be included in your confirmation email.
               </p>
             </div>
           </CardContent>
         </Card>
 
-        {/* Footer Link */}
-        <div
-          className={`text-center mt-8 transition-all duration-700 delay-300`}
-        >
+        <div className={`text-center mt-8`}>
           <Button
             variant="link"
             className="text-foreground/70 hover:text-foreground"
           >
-            Return to Dashboard →
+            <Link href={"/"}>Return to Dashboard →</Link>
           </Button>
         </div>
       </div>

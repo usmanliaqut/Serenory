@@ -23,6 +23,8 @@ export default function Page() {
   );
   const [meetingTime, setMeetingTime] = useState<string | null>(null);
   const [countdown, setCountdown] = useState<string | null>(null);
+  const [showEndSoonPopup, setShowEndSoonPopup] = useState(false);
+  const [meetingEnded, setMeetingEnded] = useState(false);
   const audioRef = useRef<HTMLAudioElement | null>(null);
   const [isPlaying, setIsPlaying] = useState(false);
 
@@ -48,10 +50,15 @@ export default function Page() {
         if (!checkData.ok) {
           setAllowed(false);
           setNotAllowedMessage(checkData.message || "Meeting not available");
+          // API may return meetingTime or booking.time
           if (checkData.meetingTime) setMeetingTime(checkData.meetingTime);
+          if (checkData.booking?.time) setMeetingTime(checkData.booking.time);
           setChecking(false);
           return;
         }
+
+        // If server returned booking time, keep it for end-time calculations
+        if (checkData.booking?.time) setMeetingTime(checkData.booking.time);
 
         setAllowed(true);
 
@@ -71,6 +78,107 @@ export default function Page() {
       }
     })();
   }, [room]);
+
+  // Poll the server while meeting hasn't started yet to auto-start without refresh
+  useEffect(() => {
+    if (!meetingTime || allowed || meetingEnded) return;
+
+    let cancelled = false;
+    const poll = async () => {
+      try {
+        const resp = await fetch(
+          `/api/token/check?room=${encodeURIComponent(room)}`
+        );
+        const data = await resp.json();
+        if (!data) return;
+        if (data.ok && !cancelled) {
+          // meeting is now allowed — fetch token and join
+          setAllowed(true);
+          if (data.booking?.time) setMeetingTime(data.booking.time);
+          const tokResp = await fetch(
+            `/api/token?room=${encodeURIComponent(
+              room
+            )}&username=${encodeURIComponent(name)}`
+          );
+          const tokData = await tokResp.json();
+          setToken(tokData.token);
+        }
+      } catch (err) {
+        console.warn("poll error", err);
+      }
+    };
+
+    // Poll more frequently when close to start
+    const tryUpdate = () => {
+      const target = new Date(meetingTime!).getTime();
+      const now = Date.now();
+      const diff = Math.max(0, target - now);
+      const interval = diff <= 60_000 ? 1000 : 5000; // 1s in last minute, otherwise 5s
+      poll();
+      const id = setInterval(poll, interval);
+      return () => clearInterval(id);
+    };
+
+    const cleanup = tryUpdate();
+    return () => {
+      cancelled = true;
+      cleanup && cleanup();
+    };
+  }, [meetingTime, allowed, meetingEnded, room, name]);
+
+  // Monitor meeting end and show "ending soon" popup
+  useEffect(() => {
+    if (!meetingTime || !allowed) return;
+
+    const AFTER_WINDOW_MS = 60 * 60 * 1000; // same as server
+    const NEAR_END_MS = 2 * 60 * 1000; // show popup 2 minutes before end
+
+    const targetEnd = new Date(meetingTime).getTime() + AFTER_WINDOW_MS;
+    let popupShown = false;
+
+    const tick = () => {
+      const now = Date.now();
+      const remaining = targetEnd - now;
+
+      if (remaining <= 0) {
+        // End meeting now
+        setMeetingEnded(true);
+        setShowEndSoonPopup(false);
+        setToken("");
+        setAllowed(false);
+        setNotAllowedMessage("meeting ended");
+        return;
+      }
+
+      // show near-end popup once
+      if (!popupShown && remaining <= NEAR_END_MS) {
+        popupShown = true;
+        setShowEndSoonPopup(true);
+        try {
+          // quick beep using WebAudio
+          const ctx = new (window.AudioContext ||
+            (window as any).webkitAudioContext)();
+          const o = ctx.createOscillator();
+          const g = ctx.createGain();
+          o.type = "sine";
+          o.frequency.value = 880;
+          o.connect(g);
+          g.connect(ctx.destination);
+          o.start();
+          g.gain.setValueAtTime(0.001, ctx.currentTime);
+          g.gain.exponentialRampToValueAtTime(0.2, ctx.currentTime + 0.02);
+          g.gain.exponentialRampToValueAtTime(0.001, ctx.currentTime + 0.4);
+          o.stop(ctx.currentTime + 0.45);
+        } catch (e) {
+          console.warn("beep failed", e);
+        }
+      }
+    };
+
+    tick();
+    const id = setInterval(tick, 1000);
+    return () => clearInterval(id);
+  }, [meetingTime, allowed]);
 
   // Countdown effect when meetingTime is present
   useEffect(() => {
@@ -124,6 +232,42 @@ export default function Page() {
 
   if (checking) {
     return <div></div>;
+  }
+
+  if (meetingEnded) {
+    return (
+      <div className="min-h-screen flex items-center justify-center p-4 sm:p-8 bg-gradient-to-br from-gray-50 via-white to-gray-100">
+        <div className="max-w-lg w-full">
+          <Card className="text-center bg-white shadow-xl border-0 overflow-hidden">
+            <div className="p-8 sm:p-12">
+              <div className="flex justify-center mb-6">
+                <div className="bg-gray-100 p-5 rounded-full">
+                  <Video className="w-12 h-12 text-gray-600" />
+                </div>
+              </div>
+
+              <h2 className="text-2xl sm:text-3xl mb-4 text-gray-800">
+                Meeting Ended
+              </h2>
+              <p className="text-gray-600 mb-8">
+                This meeting has reached its scheduled end time.
+              </p>
+
+              <Button
+                asChild
+                size="lg"
+                className="bg-gradient-to-r from-green-600 to-emerald-600 hover:from-green-700 hover:to-emerald-700 shadow-lg"
+              >
+                <a href="/">
+                  <Home className="w-5 h-5 mr-2" />
+                  Return to home screen
+                </a>
+              </Button>
+            </div>
+          </Card>
+        </div>
+      </div>
+    );
   }
 
   if (!allowed) {
@@ -208,15 +352,6 @@ export default function Page() {
                     </a>
                   </Button>
                 </div>
-
-                {/* Info Text */}
-                <div className="flex items-start gap-3 text-sm text-gray-500 bg-green-50/50 rounded-lg p-4 border border-green-100">
-                  <Music className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
-                  <p className="text-left">
-                    You can wait on this page. Relax with some background music
-                    while we get everything ready for your meeting.
-                  </p>
-                </div>
               </div>
 
               {/* Bottom Accent Bar */}
@@ -268,17 +403,42 @@ export default function Page() {
   }
 
   return (
-    <LiveKitRoom
-      video={true}
-      audio={true}
-      token={token}
-      serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
-      // Use the default UI styles
-      data-lk-theme="default"
-      style={{ height: "100vh" }}
-    >
-      {/* Your Google Meet style video grid */}
-      <VideoConference />
-    </LiveKitRoom>
+    <>
+      {showEndSoonPopup && (
+        <div className="fixed bottom-6 right-6 z-50 w-80 bg-white border shadow-lg rounded-lg p-4">
+          <div className="flex items-start gap-3">
+            <div className="flex-1">
+              <div className="text-sm font-semibold text-gray-900">
+                Meeting ending soon
+              </div>
+              <div className="text-xs text-gray-600">
+                The meeting will end at the scheduled time.
+              </div>
+            </div>
+            <div>
+              <button
+                className="text-xs text-gray-500 hover:text-gray-700"
+                onClick={() => setShowEndSoonPopup(false)}
+              >
+                Dismiss
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      <LiveKitRoom
+        video={true}
+        audio={true}
+        token={token}
+        serverUrl={process.env.NEXT_PUBLIC_LIVEKIT_URL}
+        // Use the default UI styles
+        data-lk-theme="default"
+        style={{ height: "100vh" }}
+      >
+        {/* Your Google Meet style video grid */}
+        <VideoConference />
+      </LiveKitRoom>
+    </>
   );
 }

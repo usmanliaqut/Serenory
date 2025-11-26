@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useMemo, useState, useEffect, useRef } from "react";
 import { loadStripe } from "@stripe/stripe-js";
 import {
   Clock,
@@ -8,23 +8,19 @@ import {
   User,
   ShieldCheck,
   CreditCard,
-  DollarSign,
   Heart,
-  MessageCircle,
-  Moon,
-  Cloud,
-  Users,
   Smile,
   Frown,
-  AlertTriangle,
   CalendarIcon,
+<<<<<<< Updated upstream
   ChevronDownIcon,
   CloudRain,
+=======
+>>>>>>> Stashed changes
 } from "lucide-react";
 
 import { Button } from "../ui/button";
 import { cn } from "@/lib/utils";
-import { format, setDate } from "date-fns";
 
 type SessionType = {
   id: number;
@@ -245,6 +241,93 @@ export function BookingDrawer({
   const stripePromise = loadStripe(
     process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!
   );
+
+  // State for available slots (computed from the server response)
+  const [availableSlots, setAvailableSlots] =
+    useState<string[]>(AVAILABLE_SLOTS);
+
+  // Fetch availability only when the selected date changes (no polling)
+  useEffect(() => {
+    if (!selectedDate) {
+      setAvailableSlots([]);
+      return;
+    }
+
+    let cancelled = false;
+
+    const fetchAvailabilityOnce = async () => {
+      try {
+        const dateStr = selectedDate.toISOString().slice(0, 10); // YYYY-MM-DD
+        console.log(
+          `[AVAIL][client] requesting /api/availability?date=${dateStr}`
+        );
+        const tzOffset = selectedDate.getTimezoneOffset();
+        const res = await fetch(
+          `/api/availability?date=${dateStr}&tzOffset=${tzOffset}`
+        );
+        const data = await res.json();
+        console.log("[AVAIL][client] response", {
+          status: res.status,
+          ok: res.ok,
+          data,
+        });
+
+        if (cancelled) return;
+
+        const takenISOs: string[] = Array.isArray(data?.taken)
+          ? data.taken
+          : [];
+        const takenMs = new Set(takenISOs.map((s) => new Date(s).getTime()));
+
+        // Helper: convert a TIME_SLOTS label into a timestamp (ms) for the selectedDate in local timezone
+        const timeLabelToMs = (label: string) => {
+          const [time, modifier] = label.split(" ");
+          const [hoursStr, minutesStr] = time.split(":");
+          let hours = Number(hoursStr);
+          const minutes = Number(minutesStr || 0);
+          if (modifier === "PM" && hours < 12) hours += 12;
+          if (modifier === "AM" && hours === 12) hours = 0;
+          const d = new Date(selectedDate);
+          d.setHours(hours, minutes, 0, 0);
+          return d.getTime();
+        };
+
+        const nowMs = Date.now();
+        const isToday = (() => {
+          const today = new Date();
+          return (
+            selectedDate.getFullYear() === today.getFullYear() &&
+            selectedDate.getMonth() === today.getMonth() &&
+            selectedDate.getDate() === today.getDate()
+          );
+        })();
+
+        const newAvailable = TIME_SLOTS.filter((label) => {
+          const ms = timeLabelToMs(label);
+          // Exclude slots that are already taken
+          if (takenMs.has(ms)) return false;
+          // If the selected date is today, exclude slots that are at or before now
+          if (isToday && ms <= nowMs) return false;
+          return true;
+        });
+
+        setAvailableSlots(newAvailable);
+
+        // If the currently selected time is no longer available, clear it
+        if (selectedTime && !newAvailable.includes(selectedTime)) {
+          setSelectedTime("");
+        }
+      } catch (err) {
+        console.error("[AVAIL][client] fetch error", err);
+      }
+    };
+
+    fetchAvailabilityOnce();
+
+    return () => {
+      cancelled = true;
+    };
+  }, [selectedDate]);
 
   // ✨ New handler to go to the next step with a fade effect
   const handleNext = () => {
@@ -476,7 +559,7 @@ export function BookingDrawer({
                         <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                           {TIME_SLOTS.map((t) => {
                             const active = selectedTime === t;
-                            const available = AVAILABLE_SLOTS.includes(t);
+                            const available = availableSlots.includes(t);
 
                             return (
                               <button
