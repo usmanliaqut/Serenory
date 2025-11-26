@@ -51,7 +51,7 @@ const BookingPlace = () => {
 
       <HeroSection />
       <HowItWorksSection />
-      <TestimonialsSection />
+      {/* <TestimonialsSection /> */}
 
       <PricingSection onBookSession={(session) => handleBookSession(session)} />
       <PremiumSessions

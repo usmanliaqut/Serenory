@@ -9,7 +9,7 @@ import {
   Users,
   MessageSquare,
 } from "lucide-react";
-
+import Image from "next/image";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -59,7 +59,7 @@ const Footer = () => {
           <div className="md:col-span-2">
             {/* Enhanced Brand Section */}
             <div className="mb-8">
-              <div className="flex items-center space-x-4 mb-4">
+              {/* <div className="flex items-center space-x-4 mb-4">
                 <div className="relative">
                   <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 via-teal-500  rounded-2xl flex items-center justify-center relative overflow-hidden">
                     <div className="absolute inset-0 bg-gradient-to-br from-emerald-300/30 via-transparent to-blue-300/30 rounded-2xl"></div>
@@ -67,6 +67,7 @@ const Footer = () => {
                     <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-teal-300 rounded-full opacity-60"></div>
                   </div>
                 </div>
+
                 <div>
                   <span className="text-3xl font-bold  bg-clip-text text-white">
                     Serenory
@@ -75,6 +76,15 @@ const Footer = () => {
                     Talk freely. Feel heard.
                   </div>
                 </div>
+              </div> */}
+
+              <div className="flex items-center p-">
+                <Image
+                  src="/sereny_white_logo.png"
+                  alt="Serenory Logo"
+                  width={128}
+                  height={128}
+                />
               </div>
 
               <p className="text-slate-200 mb-6 max-w-md leading-relaxed">

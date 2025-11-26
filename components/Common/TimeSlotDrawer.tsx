@@ -19,6 +19,7 @@ import {
   AlertTriangle,
   CalendarIcon,
   ChevronDownIcon,
+  CloudRain,
 } from "lucide-react";
 
 import { Button } from "../ui/button";
@@ -55,14 +56,11 @@ function getNextDays(count = 14) {
 
 // lucide-react icons are React components that accept SVG props
 import type { LucideIcon } from "lucide-react";
-import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Calendar } from "../ui/calendar";
-import { Label } from "../ui/label";
 import DatePicker from "../DatePicker";
 type IconType = LucideIcon;
 
 const FEELINGS: {
-  key: "light" | "heavy";
+  key: "light" | "unsettled" | "low";
   emoji: string;
   label: string;
   Icon: IconType;
@@ -70,14 +68,20 @@ const FEELINGS: {
   {
     key: "light",
     emoji: "🙂",
-    label: "Feeling light — happy to share",
+    label: "Feeling light — open to a simple conversation",
     Icon: Smile,
   },
   {
-    key: "heavy",
-    emoji: "🪨",
-    label: "Carrying something heavy — need a quiet ear",
+    key: "unsettled",
+    emoji: "😕",
+    label: "A bit unsettled — would like a calm presence",
     Icon: Frown,
+  },
+  {
+    key: "low",
+    emoji: "🩶",
+    label: "Feeling low — need a quieter, softer space",
+    Icon: CloudRain,
   },
 ];
 
@@ -95,6 +99,7 @@ export function BookingDrawer({
   const [name, setName] = useState<string>("");
   const [anonymous, setAnonymous] = useState<boolean>(true);
   const [email, setEmail] = useState<string>("");
+  const [note, setNote] = useState("");
   const [payment, setPayment] = useState<PaymentMethod>("stripe");
   const [step, setStep] = useState<1 | 2>(1);
   const [submitting, setSubmitting] = useState(false);
@@ -102,86 +107,119 @@ export function BookingDrawer({
   const [openDate, setOpenDate] = useState(false);
   // ✨ Added state to manage the fade transition
   const [isFading, setIsFading] = useState(false);
+  const generateTimeSlots = (intervalMinutes = 15) => {
+    const slots: string[] = [];
+    const pad = (num: number) => num.toString().padStart(2, "0");
 
-  const TIME_SLOTS = [
-    "12:00 AM",
-    "12:30 AM",
-    "01:00 AM",
-    "01:30 AM",
-    "02:00 AM",
-    "02:30 AM",
-    "03:00 AM",
-    "03:30 AM",
-    "04:00 AM",
-    "04:30 AM",
-    "05:00 AM",
-    "05:30 AM",
-    "06:00 AM",
-    "06:30 AM",
-    "07:00 AM",
-    "07:30 AM",
-    "08:00 AM",
-    "08:30 AM",
-    "09:00 AM",
-    "09:30 AM",
-    "10:00 AM",
-    "10:30 AM",
-    "11:00 AM",
-    "11:30 AM",
-    "12:00 PM",
-    "12:30 PM",
-    "01:00 PM",
-    "01:30 PM",
-    "02:00 PM",
-    "02:30 PM",
-    "03:00 PM",
-    "03:30 PM",
-    "04:00 PM",
-    "04:30 PM",
-    "05:00 PM",
-    "05:30 PM",
-    "06:00 PM",
-    "06:30 PM",
-    "07:00 PM",
-    "07:30 PM",
-    "08:00 PM",
-    "08:30 PM",
-    "09:00 PM",
-    "09:30 PM",
-    "10:00 PM",
-    "10:30 PM",
-    "11:00 PM",
-    "11:30 PM",
-  ];
+    for (let hour = 0; hour < 24; hour++) {
+      for (let min = 0; min < 60; min += intervalMinutes) {
+        const period = hour < 12 ? "AM" : "PM";
+        const displayHour = hour % 12 === 0 ? 12 : hour % 12;
+        slots.push(`${pad(displayHour)}:${pad(min)} ${period}`);
+      }
+    }
 
+    return slots;
+  };
+  const TIME_SLOTS = generateTimeSlots(15);
   const AVAILABLE_SLOTS = [
+    "12:00 AM",
+    "12:15 AM",
+    "12:30 AM",
+    "12:45 AM",
+    "01:00 AM",
+    "01:15 AM",
     "01:30 AM",
+    "01:45 AM",
     "02:00 AM",
+    "02:15 AM",
     "02:30 AM",
+    "02:45 AM",
     "03:00 AM",
+    "03:15 AM",
     "03:30 AM",
+    "03:45 AM",
     "04:00 AM",
+    "04:15 AM",
     "04:30 AM",
+    "04:45 AM",
     "05:00 AM",
+    "05:15 AM",
     "05:30 AM",
+    "05:45 AM",
     "06:00 AM",
+    "06:15 AM",
     "06:30 AM",
+    "06:45 AM",
     "07:00 AM",
+    "07:15 AM",
     "07:30 AM",
+    "07:45 AM",
     "08:00 AM",
+    "08:15 AM",
     "08:30 AM",
+    "08:45 AM",
     "09:00 AM",
+    "09:15 AM",
     "09:30 AM",
+    "09:45 AM",
     "10:00 AM",
+    "10:15 AM",
     "10:30 AM",
+    "10:45 AM",
     "11:00 AM",
+    "11:15 AM",
     "11:30 AM",
+    "11:45 AM",
     "12:00 PM",
+    "12:15 PM",
     "12:30 PM",
+    "12:45 PM",
     "01:00 PM",
+    "01:15 PM",
     "01:30 PM",
+    "01:45 PM",
+    "02:00 PM",
+    "02:15 PM",
+    "02:30 PM",
+    "02:45 PM",
+    "03:00 PM",
+    "03:15 PM",
+    "03:30 PM",
+    "03:45 PM",
+    "04:00 PM",
+    "04:15 PM",
+    "04:30 PM",
+    "04:45 PM",
+    "05:00 PM",
+    "05:15 PM",
+    "05:30 PM",
+    "05:45 PM",
+    "06:00 PM",
+    "06:15 PM",
+    "06:30 PM",
+    "06:45 PM",
+    "07:00 PM",
+    "07:15 PM",
+    "07:30 PM",
+    "07:45 PM",
+    "08:00 PM",
+    "08:15 PM",
+    "08:30 PM",
+    "08:45 PM",
+    "09:00 PM",
+    "09:15 PM",
+    "09:30 PM",
+    "09:45 PM",
+    "10:00 PM",
+    "10:15 PM",
+    "10:30 PM",
+    "10:45 PM",
+    "11:00 PM",
+    "11:15 PM",
+    "11:30 PM",
+    "11:45 PM",
   ];
-
   const days = useMemo(() => getNextDays(14), []);
 
   const isEmailValid = useMemo(() => {
@@ -266,6 +304,7 @@ export function BookingDrawer({
           name,
           anonymous,
           email,
+          optianlNote: note,
         }),
       });
 
@@ -468,8 +507,8 @@ export function BookingDrawer({
                         How are you feeling today?
                       </h3>
                       <p className="text-xs text-gray-500 italic mb-3">
-                        Your response simply helps us hold space better — it’s
-                        never shared or recorded.
+                        You’re not required to explain anything you’re not ready
+                        for. Choose whatever feels closest for this moment.
                       </p>
                       <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                         {FEELINGS.map((f) => {
@@ -516,7 +555,8 @@ export function BookingDrawer({
                             />
                             <div>
                               <span className="font-medium text-gray-900">
-                                To prefer to stay anonymous
+                                I’d rather stay anonymous — just want the
+                                session
                               </span>
                               <p className="text-sm text-gray-600">
                                 We recommend this for your privacy and comfort
@@ -555,6 +595,27 @@ export function BookingDrawer({
                           )}
                         </div>
                       </div>
+                    </section>
+
+                    <section className="mt-6">
+                      <h3 className="text-lg font-semibold text-gray-900 mb-1 flex items-center gap-2">
+                        <span className="text-gray-700">✏️</span>
+                        Optional note (completely up to you)
+                      </h3>
+
+                      <p className="text-xs text-gray-500 italic mb-3">
+                        You can leave this empty. It simply helps your listener
+                        understand your rhythm and comfort.
+                      </p>
+
+                      <textarea
+                        className="w-full p-3  border border-gray-300 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-pink-300 focus:border-pink-400 transition"
+                        rows={4}
+                        placeholder="Anything you'd like us to hold in mind (optional)."
+                        value={note}
+                        onChange={(e) => setNote(e.target.value)}
+                        disabled={!selectedTime}
+                      />
                     </section>
 
                     {/* Next Button */}
@@ -600,6 +661,12 @@ export function BookingDrawer({
                           </span>
                           <span className="font-semibold">
                             {FEELINGS.find((f) => f.key === feeling)?.label}
+                          </span>
+                        </div>
+                        <div className="flex justify-between items-center">
+                          <span className="text-gray-600">Optional note</span>
+                          <span className="font-semibold line-clamp-40 text-right max-w-[70%]">
+                            {note || "—"}
                           </span>
                         </div>
                         <div className="flex justify-between items-center">

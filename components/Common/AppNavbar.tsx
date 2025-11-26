@@ -4,6 +4,7 @@ import { MessageCircle } from "lucide-react";
 import React from "react";
 import { Button } from "../ui/button";
 import Link from "next/link";
+import Image from "next/image";
 
 const AppNavbar = () => {
   return (
@@ -13,7 +14,7 @@ const AppNavbar = () => {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             {/* Logo + Tagline */}
-            <div className="flex items-center space-x-4">
+            {/* <div className="flex items-center space-x-4">
               <div className="relative">
                 <div className="w-12 h-12 bg-gradient-to-br from-emerald-400 via-teal-400 rounded-2xl flex items-center justify-center relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-300/30 via-transparent to-blue-300/30 rounded-2xl"></div>
@@ -29,6 +30,15 @@ const AppNavbar = () => {
                   Talk freely. Feel heard.
                 </div>
               </div>
+            </div> */}
+
+            <div className="flex items-center space-x-4">
+              <Image
+                src="/serenory-logo.png"
+                alt="Serenory Logo"
+                width={128}
+                height={128}
+              />
             </div>
 
             {/* Links + CTA */}
