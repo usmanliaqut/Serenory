@@ -12,11 +12,8 @@ import {
   Smile,
   Frown,
   CalendarIcon,
-<<<<<<< Updated upstream
   ChevronDownIcon,
   CloudRain,
-=======
->>>>>>> Stashed changes
 } from "lucide-react";
 
 import { Button } from "../ui/button";
