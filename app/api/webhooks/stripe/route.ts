@@ -103,7 +103,7 @@ export async function POST(req: NextRequest) {
 
       await resend.emails.send({
   from: "hello@resend.dev", 
-  to: meta.email,          
+  to: "hello@resend.dev",          
   subject: "Your booking is confirmed ✅",
   html,
 });
