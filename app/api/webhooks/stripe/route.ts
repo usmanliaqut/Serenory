@@ -101,12 +101,13 @@ export async function POST(req: NextRequest) {
             useLink: link,
           });
 
-          await resend.emails.send({
-            from: "Serenory <noreply@serenory.app>",
-            to: meta.email,
-            subject: "✨ Booking Confirmed — Here’s Your Link!",
-            html,
-          });
+      await resend.emails.send({
+  from: "hello@resend.dev", 
+  to: meta.email,          
+  subject: "Your booking is confirmed ✅",
+  html,
+});
+
 
           console.log("📩 Confirmation email sent:", meta.email);
         } catch (emailErr: any) {
