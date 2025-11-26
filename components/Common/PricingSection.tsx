@@ -77,7 +77,7 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
   };
 
   return (
-    <section className="relative py-20 lg:py-32 overflow-hidden" id="pricing">
+    <section className="relative py-20 lg:py-32 overflow-hidden">
       {/* Enhanced Background */}
       <div className="absolute inset-0">
         {/* Base gradient */}
@@ -239,7 +239,10 @@ const PricingSection: React.FC<PricingSectionProps> = ({ onBookSession }) => {
         </div>
 
         {/* Pricing Cards */}
-        <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+        <div
+          className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto"
+          id="pricing"
+        >
           {pricingOptions.map((option, index) => (
             <div
               key={option.id}
