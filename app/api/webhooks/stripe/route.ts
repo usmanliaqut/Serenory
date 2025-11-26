@@ -91,14 +91,12 @@ export async function POST(req: NextRequest) {
         }
 
         try {
-          const link = booking
-            ? `${BASE_URL}/meet/${booking.id}`
-            : `${BASE_URL}/meeting/${session.id}`;
+         
 
           const html = generateBookingConfirmedEmailHtml({
             siteName: "Serenory",
             sessionMetadata: meta,
-            useLink: link,
+            useLink: `${BASE_URL}/booking/${booking.id}`,
           });
 
       await resend.emails.send({
