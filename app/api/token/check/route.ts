@@ -1,6 +1,9 @@
 import { NextRequest, NextResponse } from "next/server";
 import { PrismaClient } from "@prisma/client";
 
+export const runtime = "nodejs";      // Required for Prisma
+export const dynamic = "force-dynamic"; // Keep only once
+
 const prisma = new PrismaClient();
 
 export async function GET(req: NextRequest) {
@@ -11,7 +14,6 @@ export async function GET(req: NextRequest) {
   }
 
   try {
-    // Try to find a booking that matches the room id, meetingLink containing room, or payment.stripeId == room
     const booking = await prisma.booking.findFirst({
       where: {
         OR: [
@@ -23,31 +25,28 @@ export async function GET(req: NextRequest) {
     });
 
     if (!booking) {
-      return NextResponse.json({ ok: false, message: "booking not found" }, { status: 200 });
+      return NextResponse.json({ ok: false, message: "booking not found" });
     }
 
-    // Validate meeting time: allow joining within a window (5 minutes early to 60 minutes after)
     const now = Date.now();
-    const meetingTime = booking.time?.getTime ? booking.time.getTime() : new Date(booking.time).getTime();
-    const earlyToleranceMs = 5 * 60 * 1000; // 5 minutes early
-    const afterWindowMs = 60 * 60 * 1000; // 60 minutes after scheduled time
+    const meetingTime = new Date(booking.time).getTime();
+    const earlyToleranceMs = 5 * 60 * 1000;
+    const afterWindowMs = 60 * 60 * 1000;
 
     if (now < meetingTime - earlyToleranceMs) {
-      // Meeting hasn't started yet
-      return NextResponse.json({ ok: false, message: "meeting not started yet", meetingTime: booking.time }, { status: 200 });
+      return NextResponse.json({ ok: false, message: "meeting not started yet", meetingTime: booking.time });
     }
 
     if (now > meetingTime + afterWindowMs) {
-      // Meeting expired
-      return NextResponse.json({ ok: false, message: "meeting expired", meetingTime: booking.time }, { status: 200 });
+      return NextResponse.json({ ok: false, message: "meeting expired", meetingTime: booking.time });
     }
 
-    // Within allowed window
-    return NextResponse.json({ ok: true, booking: { id: booking.id, time: booking.time, meetingLink: booking.meetingLink } }, { status: 200 });
+    return NextResponse.json({
+      ok: true,
+      booking: { id: booking.id, time: booking.time, meetingLink: booking.meetingLink },
+    });
   } catch (err) {
     console.error("/api/token/check error", err);
     return NextResponse.json({ ok: false, message: "internal error" }, { status: 500 });
   }
 }
-
-export const dynamic = "force-dynamic";
