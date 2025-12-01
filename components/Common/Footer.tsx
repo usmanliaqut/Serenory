@@ -10,6 +10,7 @@ import {
   MessageSquare,
 } from "lucide-react";
 import Image from "next/image";
+import Link from "next/link";
 const Footer = () => {
   const currentYear = new Date().getFullYear();
 
@@ -242,15 +243,31 @@ const Footer = () => {
             <ul className="space-y-3 text-slate-300">
               <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
                 <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-                Privacy Policy
+                <Link
+                  href="/PrivacyPolicy"
+                  className=" hover:text-emerald-600 transition-colors"
+                >
+                  Privacy Policy
+                </Link>
               </li>
               <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
                 <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-                Terms of Use
+
+                <Link
+                  href="/TermsOfUse"
+                  className=" hover:text-emerald-600 transition-colors"
+                >
+                  Terms of Use
+                </Link>
               </li>
               <li className="flex items-center gap-2 hover:text-white transition-colors duration-200 cursor-pointer">
                 <div className="w-1.5 h-1.5 bg-indigo-400 rounded-full"></div>
-                Refund Policy
+                <Link
+                  href="/RefundPolicy"
+                  className=" hover:text-emerald-600 transition-colors"
+                >
+                  Refund Policy
+                </Link>
               </li>
             </ul>
           </div>
