@@ -80,6 +80,7 @@ const FEELINGS: {
 
 type FeelingKey = (typeof FEELINGS)[number]["key"];
 type PaymentMethod = "stripe" | "paypal";
+type DurationKey = "15 mins" | "30 mins" | "60 mins";
 
 export function BookingDrawer({
   open,
@@ -98,6 +99,15 @@ export function BookingDrawer({
   const [submitting, setSubmitting] = useState(false);
   const [confirmed, setConfirmed] = useState(false);
   const [openDate, setOpenDate] = useState(false);
+  const [customSession, setCustomSession] = useState<{
+    duration: string | null;
+    price: number | null;
+    title: string | null;
+  }>({
+    duration: null,
+    price: null,
+    title: null,
+  });
   // ✨ Added state to manage the fade transition
   const [isFading, setIsFading] = useState(false);
   const generateTimeSlots = (intervalMinutes = 15) => {
@@ -114,6 +124,13 @@ export function BookingDrawer({
 
     return slots;
   };
+
+  const durationOptions: Record<DurationKey, { price: number; title: string }> =
+    {
+      "15 mins": { price: 5, title: "Drift" },
+      "30 mins": { price: 10, title: "Anchor" },
+      "60 mins": { price: 15, title: "Haven" },
+    };
   const TIME_SLOTS = generateTimeSlots(15);
   const AVAILABLE_SLOTS = [
     "12:00 AM",
@@ -345,6 +362,9 @@ export function BookingDrawer({
     }, 300);
   };
 
+  const bookingDuration = session?.duration || customSession.duration;
+  const bookingPrice = session?.price || customSession.price;
+  const bookingTitle = session?.title || customSession.title;
   const handleConfirmAndPay = async () => {
     if (!canSubmit) return;
     setSubmitting(true);
@@ -371,9 +391,9 @@ export function BookingDrawer({
               price_data: {
                 currency: "usd",
                 product_data: {
-                  name: session?.title || "Serenory Session",
+                  name: bookingTitle || "Serenory Session",
                 },
-                unit_amount: (session?.price || 0) * 100,
+                unit_amount: (bookingPrice || 0) * 100,
               },
               quantity: 1,
             },
@@ -527,6 +547,38 @@ export function BookingDrawer({
                 {step === 1 ? (
                   <div className="space-y-8">
                     <section>
+                      {!session?.duration && (
+                        <section>
+                          <h3 className="text-lg font-semibold text-gray-900 mb-2">
+                            Choose Session Duration
+                          </h3>
+
+                          <div className="flex gap-3 mb-4">
+                            {(
+                              Object.keys(durationOptions) as DurationKey[]
+                            ).map((duration) => (
+                              <button
+                                key={duration}
+                                onClick={() => {
+                                  setCustomSession({
+                                    duration,
+                                    price: durationOptions[duration].price,
+                                    title: durationOptions[duration].title,
+                                  });
+                                }}
+                                className={`px-4 py-2 rounded-xl border-2 text-sm font-medium transition-all duration-200 ${
+                                  customSession.duration === duration
+                                    ? "border-pink-500 bg-pink-50 text-pink-700 shadow-sm"
+                                    : "border-gray-200 bg-white/80 hover:border-pink-300 hover:bg-pink-50/50 text-gray-700"
+                                }`}
+                              >
+                                {duration}
+                              </button>
+                            ))}
+                          </div>
+                        </section>
+                      )}
+
                       <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
                         <CalendarIcon className="w-5 h-5 text-emerald-600" />
                         Choose Your Date
@@ -722,7 +774,7 @@ export function BookingDrawer({
                         <div className="flex justify-between items-center">
                           <span className="text-gray-600">Session Type</span>
                           <span className="font-semibold">
-                            {session?.title} ({session?.duration})
+                            {bookingTitle} ({bookingDuration})
                           </span>
                         </div>
                         <div className="flex justify-between items-center">
@@ -763,7 +815,7 @@ export function BookingDrawer({
                           <div className="flex justify-between items-center text-lg">
                             <span className="font-bold">Total</span>
                             <span className="font-bold text-emerald-600">
-                              {session?.price}
+                              {bookingPrice}
                             </span>
                           </div>
                         </div>
