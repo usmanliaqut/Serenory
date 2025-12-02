@@ -563,7 +563,7 @@ export function BookingDrawer({
                             Choose Session Duration
                           </h3>
 
-                          <div className="flex gap-3 mb-4 flex-wrap">
+                          <div className="flex gap-3 mb-4 flex-wrap sm:flex-nowrap">
                             {(
                               Object.keys(durationOptions) as DurationKey[]
                             ).map((duration) => (
