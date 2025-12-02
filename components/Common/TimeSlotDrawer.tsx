@@ -80,7 +80,7 @@ const FEELINGS: {
 
 type FeelingKey = (typeof FEELINGS)[number]["key"];
 type PaymentMethod = "stripe" | "paypal";
-type DurationKey = "15 mins" | "30 mins" | "60 mins";
+type DurationKey = "15 mins" | "30 mins" | "60 mins" | "75 mins" | "90 mins";
 
 export function BookingDrawer({
   open,
@@ -103,10 +103,12 @@ export function BookingDrawer({
     duration: string | null;
     price: number | null;
     title: string | null;
+    durationText: string | null;
   }>({
     duration: null,
     price: null,
     title: null,
+    durationText: null,
   });
   // ✨ Added state to manage the fade transition
   const [isFading, setIsFading] = useState(false);
@@ -125,12 +127,20 @@ export function BookingDrawer({
     return slots;
   };
 
-  const durationOptions: Record<DurationKey, { price: number; title: string }> =
-    {
-      "15 mins": { price: 5, title: "Drift" },
-      "30 mins": { price: 10, title: "Anchor" },
-      "60 mins": { price: 15, title: "Haven" },
-    };
+  const durationOptions: Record<
+    DurationKey,
+    { price: number; title: string; durationText: string }
+  > = {
+    "15 mins": { price: 5, title: "Drift", durationText: "15 mins" },
+    "30 mins": { price: 10, title: "Anchor", durationText: "30 mins" },
+    "60 mins": { price: 15, title: "Haven", durationText: "60 mins" },
+    "75 mins": {
+      price: 30,
+      title: "Quiet Continuation",
+      durationText: "75 mins",
+    },
+    "90 mins": { price: 45, title: "Deep Presence", durationText: "90 mins" },
+  };
   const TIME_SLOTS = generateTimeSlots(15);
   const AVAILABLE_SLOTS = [
     "12:00 AM",
@@ -564,6 +574,8 @@ export function BookingDrawer({
                                     duration,
                                     price: durationOptions[duration].price,
                                     title: durationOptions[duration].title,
+                                    durationText:
+                                      durationOptions[duration].durationText,
                                   });
                                 }}
                                 className={`px-4 py-2 rounded-xl border-2 text-sm font-medium transition-all duration-200 ${
@@ -572,7 +584,9 @@ export function BookingDrawer({
                                     : "border-gray-200 bg-white/80 hover:border-pink-300 hover:bg-pink-50/50 text-gray-700"
                                 }`}
                               >
-                                {duration}
+                                {durationOptions[duration].title}{" "}
+                                {durationOptions[duration].durationText} — $
+                                {durationOptions[duration].price}
                               </button>
                             ))}
                           </div>

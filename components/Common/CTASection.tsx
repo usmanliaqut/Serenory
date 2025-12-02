@@ -10,7 +10,7 @@ const CTASection: React.FC<CTASectionProps> = ({ onBookSession }) => {
   const handleBookSession = () => {
     onBookSession?.({
       id: "1",
-      name: "Single Session",
+      name: "",
       duration: "",
       price: "",
     });

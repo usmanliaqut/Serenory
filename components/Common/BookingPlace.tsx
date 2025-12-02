@@ -49,7 +49,7 @@ const BookingPlace = () => {
     <>
       {/* Hero Section */}
 
-      <HeroSection />
+      <HeroSection onBookSession={(session) => handleBookSession(session)} />
       <HowItWorksSection />
       {/* <TestimonialsSection /> */}
 
