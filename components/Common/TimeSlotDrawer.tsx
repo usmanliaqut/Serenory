@@ -133,7 +133,7 @@ export function BookingDrawer({
   > = {
     "15 mins": { price: 5, title: "Drift", durationText: "15 mins" },
     "30 mins": { price: 10, title: "Anchor", durationText: "30 mins" },
-    "60 mins": { price: 15, title: "Haven", durationText: "60 mins" },
+    "60 mins": { price: 20, title: "Haven", durationText: "60 mins" },
     "75 mins": {
       price: 30,
       title: "Quiet Continuation",
@@ -563,7 +563,7 @@ export function BookingDrawer({
                             Choose Session Duration
                           </h3>
 
-                          <div className="flex gap-3 mb-4">
+                          <div className="flex gap-3 mb-4 flex-wrap">
                             {(
                               Object.keys(durationOptions) as DurationKey[]
                             ).map((duration) => (
