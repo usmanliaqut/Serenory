@@ -47,8 +47,6 @@ export async function POST(req: NextRequest) {
       case "checkout.session.completed": {
         const session = event.data.object as Stripe.Checkout.Session;
         const meta = session.metadata;
-         console.log("meta",meta)
-        console.log("🎯 checkout.session.completed received");
 
         if (!meta?.email || !meta?.type || !meta?.time) {
           console.error("❌ Missing metadata →", meta);
@@ -73,6 +71,9 @@ export async function POST(req: NextRequest) {
               type: meta.type,
               mood: meta?.mood ?? null,
               time: new Date(meta.time),
+              startTime: meta.startTime,
+              endTime: meta.endTime,
+              note: meta?.note ?? null,
               userId: user.id,
               meetingLink: `${BASE_URL}/meeting/${session.id}`,
               payment: {

@@ -5,7 +5,7 @@ import {prisma} from "../../../lib/prisma";
 export async function GET() {
   try {
     // 1️⃣ Total Users
-    const totalUsers = await prisma.User.count();
+    const totalUsers = await prisma.user.count();
 
     // 2️⃣ Total Payments
     const totalPayments = await prisma.payment.count();

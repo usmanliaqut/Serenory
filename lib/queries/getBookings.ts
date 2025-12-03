@@ -10,7 +10,6 @@ export async function getBookings({ page = 1, limit = 10 }: GetBookingsOptions =
   try {
     const skip = (page - 1) * limit;
 
-    // Fetch bookings with related user info
     const [bookings, totalCount] = await Promise.all([
       prisma.booking.findMany({
         skip,
@@ -28,6 +27,7 @@ export async function getBookings({ page = 1, limit = 10 }: GetBookingsOptions =
       }),
       prisma.booking.count(),
     ]);
+    console.log("bookings",bookings)
 
     return {
       bookings: bookings,

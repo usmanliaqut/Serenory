@@ -10,7 +10,15 @@ import {
 } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CalendarDays, Eye, Mail, RefreshCw, User, Video } from "lucide-react";
+import {
+  CalendarDays,
+  Eye,
+  LinkIcon,
+  Mail,
+  RefreshCw,
+  User,
+  Video,
+} from "lucide-react";
 import {
   Pagination,
   PaginationContent,
@@ -49,14 +57,9 @@ export default async function BookingsPage({
             <CardTitle className="text-lg font-semibold">
               Booking Details
             </CardTitle>
-            <form
-              action="/dashboard/bookings"
-              className="flex items-center gap-2"
-            >
-              <Button variant="outline" size="sm">
-                <RefreshCw className="w-4 h-4 mr-1" /> Refresh
-              </Button>
-            </form>
+            <Button variant="outline" size="sm">
+              <RefreshCw className="w-4 h-4 mr-1" /> Refresh
+            </Button>
           </CardHeader>
           <CardContent>
             {bookings.length === 0 ? (
@@ -68,33 +71,58 @@ export default async function BookingsPage({
                 <Table>
                   <TableHeader>
                     <TableRow>
-                      <TableHead>Client</TableHead>
-                      <TableHead>Type</TableHead> <TableHead>Mood</TableHead>
-                      <TableHead>Date & Time</TableHead>
+                      <TableHead>Client Name</TableHead>
+                      <TableHead>Email</TableHead>
+                      <TableHead>Type</TableHead>
+                      <TableHead>Mood</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead>Start Time</TableHead>
+                      <TableHead>End Time</TableHead>
                       <TableHead>Status</TableHead>
+                      <TableHead>Meeting Link</TableHead>
                       <TableHead className="text-right">Actions</TableHead>
                     </TableRow>
                   </TableHeader>
                   <TableBody>
                     {bookings.map((b: any) => (
                       <TableRow key={b.id}>
-                        <TableCell className="flex items-center gap-2">
-                          <User className="w-4 h-4 text-muted-foreground" />
-                          {b?.user.name || "Unknown"}
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <User className="w-4 h-4 text-muted-foreground" />
+                            {b?.user.name || "Unknown"}
+                          </div>
                         </TableCell>
-                        <TableCell className="flex items-center gap-2">
-                          <Mail className="w-4 h-4 text-muted-foreground" />
-                          {b?.user.email || "-"}
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <Mail className="w-4 h-4 text-muted-foreground" />
+                            {b?.user.email || "-"}
+                          </div>
                         </TableCell>
                         <TableCell>{b.type || "-"}</TableCell>
                         <TableCell>{b.mood || "-"}</TableCell>
-                        <TableCell className="flex items-center gap-2">
-                          <CalendarDays className="w-4 h-4 text-muted-foreground" />
-                          {b.time
-                            ? new Date(b.time).toLocaleString("en-US", {
-                                weekday: "short",
-                                month: "short",
-                                day: "numeric",
+                        <TableCell>
+                          <div className="flex items-center gap-2">
+                            <CalendarDays className="w-4 h-4 text-muted-foreground" />
+                            {b.startTime
+                              ? new Date(b.startTime).toLocaleString("en-US", {
+                                  weekday: "short",
+                                  month: "short",
+                                  day: "numeric",
+                                })
+                              : "-"}
+                          </div>
+                        </TableCell>
+                        <TableCell>
+                          {b.startTime
+                            ? new Date(b.startTime).toLocaleString("en-US", {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                              })
+                            : "-"}
+                        </TableCell>
+                        <TableCell>
+                          {b.endTime
+                            ? new Date(b.endTime).toLocaleString("en-US", {
                                 hour: "2-digit",
                                 minute: "2-digit",
                               })
@@ -113,21 +141,44 @@ export default async function BookingsPage({
                             {b.status || "pending"}
                           </Badge>
                         </TableCell>
-                        <TableCell className="text-right space-x-2">
-                          {b.status === "confirmed" && (
-                            <Button
-                              size="sm"
-                              className="bg-emerald-600 hover:bg-emerald-700 text-white"
-                              asChild
+                        <TableCell>
+                          {b.meetingLink ? (
+                            <a
+                              href={b.meetingLink}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="flex items-center gap-1 text-emerald-600 hover:text-emerald-700 hover:underline"
                             >
-                              <a href={b.meetingLink || "#"} target="_blank">
-                                <Video className="w-4 h-4 mr-1" /> Join
-                              </a>
-                            </Button>
+                              <LinkIcon className="w-4 h-4" />
+                              <span className="text-sm">Link</span>
+                            </a>
+                          ) : (
+                            <span className="text-muted-foreground text-sm">
+                              -
+                            </span>
                           )}
-                          <Button variant="ghost" size="sm">
-                            <Eye className="w-4 h-4 mr-1" /> View
-                          </Button>
+                        </TableCell>
+                        <TableCell className="text-right">
+                          <div className="flex items-center justify-end gap-2">
+                            {b.status === "confirmed" && b.meetingLink && (
+                              <Button
+                                size="sm"
+                                className="bg-emerald-600 hover:bg-emerald-700 text-white"
+                                asChild
+                              >
+                                <a
+                                  href={b.meetingLink}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                >
+                                  <Video className="w-4 h-4 mr-1" /> Join
+                                </a>
+                              </Button>
+                            )}
+                            <Button variant="ghost" size="sm">
+                              <Eye className="w-4 h-4 mr-1" /> View
+                            </Button>
+                          </div>
                         </TableCell>
                       </TableRow>
                     ))}
